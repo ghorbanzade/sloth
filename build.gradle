@@ -12,26 +12,34 @@ apply plugin: 'findbugs'
 apply plugin: 'java'
 apply plugin: 'pmd'
 
+version = '0.1'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Sloth',
+                   'Implementation-Version': version
+    }
+}
+
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-	testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
 }
 
 checkstyle {
-	toolVersion = '6.17'
+    toolVersion = '6.17'
 }
 
 pmd {
-	toolVersion = '5.4.1'
+    toolVersion = '5.4.1'
 }
 
 findbugsMain {
-  reports {
-    xml.enabled = false
-    html.enabled = true
-  }
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
