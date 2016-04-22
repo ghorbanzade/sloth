@@ -1,0 +1,37 @@
+//
+// Sloth: Integrated Distributed Activity Recognition System
+//        with Minimal Network Radio Communications
+//
+// Copyright 2016 Pejman Ghorbanzade <mail@ghorbanzade.com>
+// Released under the terms of MIT License
+// https://github.com/ghorbanzade/sloth/blob/master/LICENSE
+//
+
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'java'
+apply plugin: 'pmd'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+	testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+}
+
+checkstyle {
+	toolVersion = '6.17'
+}
+
+pmd {
+	toolVersion = '5.4.1'
+}
+
+findbugsMain {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
