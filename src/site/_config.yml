@@ -1,6 +1,6 @@
 title: Sloth
 email: mail@ghorbanzade.com
-baseurl: ""
+baseurl: "/sloth"
 
 # Build settings
 markdown: kramdown
