@@ -1,0 +1,19 @@
+---
+layout: default
+title: Page Not Found
+parmalink: /404.html
+---
+
+<div class="row">
+	<div class="col-sm-6 pull-right">
+		<center>
+		<figure>
+			<img class="img-responsive" src="{{ "/media/img/sad-puppy.png" | prepend: site.baseurl }}" alt="Page Not Found" style=""/>
+		</figure>
+		</center>
+	</div>
+	<div class="col-sm-6" style="text-align: justify;">
+		{% capture my_include %}{% include page-not-found.md %}{% endcapture %}
+		{{ my_include | markdownify }}
+	</div>
+</div>

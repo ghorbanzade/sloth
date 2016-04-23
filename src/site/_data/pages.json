@@ -1,0 +1,50 @@
+[
+	{
+		"title": "Home",
+		"url": "/",
+		"fname": "index",
+		"menu": true,
+		"js": false,
+		"css": true
+	},
+	{
+		"title": "Demo",
+		"url": "/demo",
+		"fname": "demo",
+		"menu": true,
+		"js": false,
+		"css": false
+	},
+	{
+		"title": "Contact",
+		"url": "/contact",
+		"fname": "contact",
+		"menu": true,
+		"js": false,
+		"css": true
+	},
+	{
+		"title": "Account",
+		"url": "/account",
+		"fname": "account",
+		"menu": true,
+		"js": false,
+		"css": true
+	},
+	{
+		"title": "Page Not Found",
+		"url": "/404",
+		"fname": "404",
+		"menu": false,
+		"js": false,
+		"css": false
+	},
+	{
+		"title": "About",
+		"url": "/about",
+		"fname": "about",
+		"menu": false,
+		"js": false,
+		"css": false
+	}
+]

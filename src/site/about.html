@@ -1,0 +1,16 @@
+---
+layout: default
+title: About
+permalink: /about
+---
+
+<div class="row">
+	<div class="col-sm-12" style="padding: 0 10%; text-align: justify;">
+		<h3 id='terms'>Terms of Service</h3>
+		{% capture my_include %}{% include terms.md %}{% endcapture %}
+		{{ my_include | markdownify }}
+		<h3 id='privacy'>Privacy Policy</h3>
+		{% capture my_include %}{% include privacy.md %}{% endcapture %}
+		{{ my_include | markdownify }}
+	</div>
+</div>

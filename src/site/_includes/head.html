@@ -1,0 +1,32 @@
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="/favicon.ico?v=3">
+
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+
+	<title>{{ site.title | escape }}{% if page.title %} | {{ page.title | escape }}{% endif %}</title>
+	<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+
+	<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+	{% for ppage in site.data.pages %}
+		{% if ppage.js and ppage.url and ppage.url == page.url %}
+			<script src="{{ "/media/js/" | append: ppage.fname | append: '.js' | prepend: site.baseurl }}"></script>
+		{% endif %}
+	{% endfor %}
+
+	{% for ppage in site.data.pages %}
+		{% if ppage.css and ppage.url and ppage.url == page.url %}
+			<link rel="stylesheet" href="{{ "/media/css/" | append: ppage.fname | append: '.css' | prepend: site.baseurl }}">
+		{% endif %}
+	{% endfor %}
+
+	<link rel="stylesheet" href="{{ "/media/css/main.css" | prepend: site.baseurl }}">
+
+</head>

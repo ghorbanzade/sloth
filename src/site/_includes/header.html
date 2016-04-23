@@ -1,0 +1,13 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-pills">
+        {% for ppage in site.data.pages %}
+          {% if ppage.menu and ppage.url %}
+            <li class="{% if page.url == ppage.url" %}active{% endif %}"><a href="{{ ppage.url | prepend: site.baseurl }}">{{ ppage.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

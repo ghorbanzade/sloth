@@ -1,0 +1,49 @@
+/**
+ * main frame
+ */
+body {
+	background-color: #F9F9F9 !important;
+}
+
+.container {
+}
+
+/**
+ * header
+ */
+.page-header {
+	border: none;
+	margin: 0px;
+	padding: 40px 0%;
+}
+
+/**
+ * content
+ */
+.page-content {
+	background-color: white;
+	padding: 40px 5%;
+	/*font-size: 16px;*/
+}
+
+.page-content .tile {
+	background-color: #F9F9F9;
+	padding: 40px 0px;
+}
+
+/**
+ * footer
+ */
+footer {
+	padding: 40px 0px;
+	text-align: center;
+}
+
+footer svg {
+	width: 40px;
+	fill: #CCC;
+}
+
+footer svg:hover {
+	fill: #999;
+}

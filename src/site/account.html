@@ -1,0 +1,130 @@
+---
+layout: default
+title: Account
+permalink: /account
+---
+
+<div class="account" data-ng-controller="account">
+	<div class="row">
+		<div data-ng-show="message" data-ng-bind="message"></div>
+	</div>
+	<div class="tab-content">
+		<div class="signin tab-pane fade in active" id="signin">
+			<div class="row gray-box">
+				<div class="col-sm-6">
+					<div class="text">
+						{% capture my_include %}{% include account-signin.md %}{% endcapture %}
+						{{ my_include | markdownify }}
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<form>
+						<div class="form-group">
+							<label class="sr-only" for="email">Your Email Address</label>
+							<input class="form-control" type="email" name="email" id="email"
+							       data-ng-model="formData.login.email"
+							       tabindex="1" placeholder="Your Email Address" required>
+							<span class="help-block" data-ng-show="errorEmail"
+							      data-ng-bind="errorEmail"></span>
+						</div>
+						<div class="form-group">
+							<label class="sr-only" for="password">Your Password</label>
+							<input class="form-control" type="text" name="password" id="password"
+							       data-ng-model="formData.login.password"
+							       tabindex="2" placeholder="Your Password" required>
+							<span class="help-block" data-ng-show="errorPassword"
+							      data-ng-bind="errorPassword"></span>
+						</div>
+						<button class="btn btn-info btn-block" type="submit" tabindex="3">
+							Login
+						</button>
+						<div class='row'>
+							<div class='col-xs-6'>
+								<div class="checkbox" name="remember" tabindex="3">
+									<label><input type="checkbox" name="remember"> Remember me</label>
+								</div>
+							</div>
+							<div class='col-xs-6'>
+								<div style='text-align: right; margin: 10px 0;'>
+									<a href="#reset" data-toggle="tab">Forgot your password?</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row footer">
+				<a href="#signup" data-toggle="tab">Do not have an account? Create one!</a>
+			</div>
+		</div>
+		<div class="signup tab-pane fade" id="signup">
+			<div class="row gray-box">
+				<div class="col-sm-6">
+					<div class="text">
+						{% capture my_include %}{% include account-signup.md %}{% endcapture %}
+						{{ my_include | markdownify }}
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<form>
+						<div class="form-group">
+							<label class="sr-only" for="name">Your Name</label>
+							<input class="form-control" type="email" name="name" id="name"
+							       data-ng-model="formData.signup.name"
+							       tabindex="1" placeholder="Your Name" required>
+							<span class="help-block" data-ng-show="errorName"
+							      data-ng-bind="errorName"></span>
+						</div>
+						<div class="form-group">
+							<label class="sr-only" for="email">Your Email</label>
+							<input class="form-control" type="text" name="email" id="email"
+							       data-ng-model="formData.signup.email"
+							       tabindex="2" placeholder="Your Email" required>
+							<span class="help-block" data-ng-show="errorEmail"
+							      data-ng-bind="errorEmail"></span>
+						</div>
+						<button class="btn btn-info btn-block" type="submit" tabindex="4">
+							Register
+						</button>
+						<div class="checkbox">
+							<label><input type="checkbox" name="agree" tabindex="3" required>
+								I agree to this website's <a href="/about#privacy">privacy policy</a> and <a href="/about#terms">terms of service</a>.
+							</label>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row footer">
+				<a href="#signin" data-toggle="tab">Already have an account? Log In!</a>
+			</div>
+		</div>
+		<div class="reset tab-pane fade" id="reset">
+			<div class="row gray-box">
+				<div class="col-sm-6">
+					<div class="text">
+						{% capture my_include %}{% include account-reset.md %}{% endcapture %}
+						{{ my_include | markdownify }}
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<form>
+						<div class="form-group">
+							<label class="sr-only" for="emailReset">Your Email</label>
+							<input class="form-control" type="text" name="emailReset" id="emailReset"
+							       data-ng-model="formData.reset.email"
+							       tabindex="1" placeholder="Your Email" required>
+							<span class="help-block" data-ng-show="errorEmailReset"
+							      data-ng-bind="errorEmailReset"></span>
+						</div>
+						<button class="btn btn-info btn-block" type="submit" tabindex="2">
+							Reset Password
+						</button>
+					</form>
+				</div>
+			</div>
+			<div class="row footer">
+				<a href="#signin" data-toggle="tab">Remembered your password? Log In!</a>
+			</div>
+		</div>
+	</div>
+</div>

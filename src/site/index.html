@@ -1,1 +1,22 @@
-Static Webpage goes here!
+---
+layout: default
+title: Home
+permalink: /
+---
+
+<div class="row">
+	<div class="col-sm-3">
+        	<img class="img-responsive logo" src="media/img/sloth.png" alt="Sloth Logo">
+	</div>
+	<div class="col-sm-9">
+		<h1>Sloth</h1>
+		<h3>An Energy-Efficient Activity Recognition System</h3>
+		<hr>
+		{% capture my_include %}{% include about-me.md %}{% endcapture %}
+		{{ my_include | markdownify }}
+	</div>
+	<div class="col-sm-12">
+		<div class="about-me">
+		</div>
+	</div>
+</div>
