@@ -1,6 +1,5 @@
 //
-// Sloth: Integrated Distributed Activity Recognition System
-//        with Minimal Network Radio Communications
+// Sloth: An Energy-Efficient Activity Recognition System
 //
 // Copyright 2016 Pejman Ghorbanzade <mail@ghorbanzade.com>
 // Released under the terms of MIT License
@@ -13,20 +12,39 @@ apply plugin: 'java'
 apply plugin: 'pmd'
 
 version = '0.1'
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Sloth',
-                   'Implementation-Version': version
-    }
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'commons-net:commons-net:3.4'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.rxtx:rxtx:2.1.7'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+}
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes('Implementation-Title': 'Sloth',
+                   'Implementation-Version': version,
+                   'Main-Class': 'com.ghorbanzade.sloth.SlothMain'
+                   //'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+task myJavadocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    destinationDir = file("./doc/")
 }
 
 checkstyle {
@@ -38,6 +56,7 @@ pmd {
 }
 
 findbugsMain {
+    ignoreFailures = false
     reports {
         xml.enabled = false
         html.enabled = true
