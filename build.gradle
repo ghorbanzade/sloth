@@ -49,6 +49,7 @@ task myJavadocs(type: Javadoc) {
 
 checkstyle {
     toolVersion = '6.17'
+    ignoreFailures = false
 }
 
 pmd {
@@ -61,4 +62,8 @@ findbugsMain {
         xml.enabled = false
         html.enabled = true
     }
+}
+
+clean {
+    delete "log"
 }

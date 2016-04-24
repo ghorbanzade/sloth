@@ -9,6 +9,8 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
+
 /**
  *
  *
@@ -24,10 +26,14 @@ public class SlothMain {
    * @param args command line arguments
    */
   public static void main(String[] args) {
+    ConfigManager cm = new ConfigManager("/config.properties");
+    FileQueue fq = new FileQueue(cm);
+    Uploader uploader = new Uploader(cm, fq);
     try {
-      ConfigReader cr = new ConfigReader("/config.properties");
-      System.out.println(cr.getAsInt("serial.baudrate"));
-      System.out.println(cr.getAsString("serial.name"));
+      cm.init();
+      uploader.init();
+      //Thread thread = new Thread(uploader);
+      //thread.start();
     } catch (RuntimeException ex) {
       log.error("program aborted immaturely");
     }

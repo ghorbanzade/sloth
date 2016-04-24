@@ -9,7 +9,9 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.NumberFormatException;
@@ -22,33 +24,55 @@ import java.util.Properties;
  *
  * @author Pejman Ghorbanzade
  */
-public final class ConfigReader {
+public final class ConfigManager {
 
   /**
    * Since the configuration file to be read is a java properties file
    * an object of this class would have a properties attribute to hold
    * the properties in memory.
    */
+  private final String path;
   private final Properties config = new Properties();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * Upon instantiation, an object of this class will read content of
-   * a given properties file and loads all properties for easy access.
+   * Constructing a config manager object should not be expensive.
    *
-   * @param path the path to the properties file to parse
+   * @param path the path to the properties file
+   */
+  public ConfigManager(String path) {
+    this.path = path;
+  }
+
+  /**
+   *
+   */
+  public void init() {
+    if (ConfigManager.class.getResource(this.path).getFile().isEmpty()) {
+      log.info("creating configuration file");
+      this.save();
+    } else {
+      log.trace("configuration file already exists");
+      this.reload();
+    }
+  }
+
+  /**
+   * Tries to read content of a given properties file and loads all
+   * properties for easy access.
+   *
    * @throws FatalException if configuration file cannot be loaded
    */
-  public ConfigReader(String path) throws FatalException {
-    try (InputStream fis = ConfigReader.class.getResourceAsStream(path)) {
+  private void reload() throws FatalException {
+    try (InputStream fis = ConfigManager.class.getResourceAsStream(this.path)) {
       this.config.load(fis);
       fis.close();
-      this.log.trace("loaded configuration file");
+      log.trace("loaded configuration file");
     } catch (FileNotFoundException ex) {
-      this.log.fatal("configuration file is missing");
+      log.fatal("configuration file is missing");
       throw new FatalException(this.getClass());
     } catch (IOException ex) {
-      this.log.fatal("failed to read configuration file");
+      log.fatal("failed to read configuration file");
       throw new FatalException(this.getClass());
     }
   }
@@ -75,6 +99,29 @@ public final class ConfigReader {
    */
   public int getAsInt(String key) throws NumberFormatException {
     return Integer.parseInt(this.getAsString(key));
+  }
+
+  /**
+   *
+   *
+   * @param key
+   * @param value
+   */
+  public void update(String key, String value) {
+    this.config.setProperty(key, value);
+  }
+
+  /**
+   *
+   */
+  public void save() {
+    try (FileOutputStream fos = new FileOutputStream(new File(this.path))) {
+      this.config.store(fos, "auto-generated file");
+    } catch (FileNotFoundException ex) {
+      log.error("unable to construct file stream");
+    } catch (IOException ex) {
+      log.error("saving properties was unsuccessful");
+    }
   }
 
 }
