@@ -39,8 +39,8 @@ public class ConfigManagerTest {
   }
 
   /**
-   * getAsString() should return value associated with a valid given key
-   * in string format.
+   * Method get as string should return value associated with a valid given
+   * key in string format.
    */
   @Test
   public void getAsStringWithValidKey() {
@@ -51,7 +51,8 @@ public class ConfigManagerTest {
   }
 
   /**
-   * getAsInt() should return value associated with valid given key as int.
+   * Method get as int should return value associated with valid given key
+   * as int.
    */
   @Test
   public void getAsIntWithValidKey() {
@@ -61,7 +62,7 @@ public class ConfigManagerTest {
   }
 
   /**
-   * If config manager is not initialized, getAsString() should return
+   * If config manager is not initialized, method get as string should return
    * empty string.
    */
   @Test
@@ -81,8 +82,8 @@ public class ConfigManagerTest {
   }
 
   /**
-   * getAsString() should return empty string if given a key that does not
-   * exist in the property list.
+   * Method get as string should return empty string if given a key that
+   * does not exist in the property list.
    */
   @Test
   public void getAsStringWithInvalidKey() {
@@ -92,7 +93,7 @@ public class ConfigManagerTest {
   }
 
   /**
-   * If a key does not exists in property list, calling getAsInt() should
+   * If a key does not exists in property list, calling get as int should
    * throw an exception.
    */
   @Test(expected = NumberFormatException.class)
@@ -104,7 +105,7 @@ public class ConfigManagerTest {
 
   /**
    * If value associated with a given key cannot be converted to integer,
-   * calling getAsInt() should throw an exception.
+   * calling get as int should throw an exception.
    */
   @Test(expected = NumberFormatException.class)
   public void getAsIntWithNonConvertibleValue() {

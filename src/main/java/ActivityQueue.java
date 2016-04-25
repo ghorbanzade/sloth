@@ -13,33 +13,35 @@ import java.nio.file.Path;
 import java.util.Vector;
 
 /**
- * This class defines a queue of file paths that are fetched by uploader
- * to be transfered to the remote server.
+ * This class defines a queue of activity objects either learned or recognized
+ * to be used by activity logger that writes them in files.
  *
  * @author Pejman Ghorbanzade
+ * @see Activity
  * @see ActivityLogger
- * @see Uploader
+ * @see Classifier
+ * @see Learner
  */
-public final class FileQueue {
+public final class ActivityQueue {
 
   private final ConfigManager cfg;
-  private final Vector<Path> queue = new Vector<Path>();
+  private final Vector<Activity> queue = new Vector<Activity>();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * A file queue is a container of paths to files that need to be uploaded
-   * to the remote server by uploader. The queue is filled with paths to
-   * files written by the activity logger.
+   * An activity queue is a container for recognized or learned activities
+   * that is used by learner and classifier threads to transfer their product
+   * to the activity logger thread.
    *
    * @param cfg main configuration parameters of the program
    */
-  public FileQueue(ConfigManager cfg) {
+  public ActivityQueue(ConfigManager cfg) {
     this.cfg = cfg;
   }
 
   /**
-   * This method is called by uploader to check if there are files waiting
-   * to be uploaded to the remote server.
+   * This method is called by file logger to check if there are activity
+   * objects waiting to be logged to a file.
    *
    * @return whether the queue is empty or not
    */
@@ -48,13 +50,14 @@ public final class FileQueue {
   }
 
   /**
-   * This method dequeues an element from the File queue and returns it
-   * to the uploader object to upload the file to the remote server.
+   * This method dequeues an element from the Activity queue and returns it
+   * to the file logger object to generate a json file for it.
    *
    * @return the first element of the queue or null if queue is empty
    */
-  public Path get() {
+  public Activity get() {
     return (this.queue.isEmpty()) ? null : this.queue.remove(0);
   }
 
 }
+

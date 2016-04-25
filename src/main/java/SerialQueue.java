@@ -9,37 +9,36 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.nio.file.Path;
 import java.util.Vector;
 
 /**
- * This class defines a queue of file paths that are fetched by uploader
- * to be transfered to the remote server.
+ * This class defines a queue of data of sensor nodes received from
+ * serial port and waiting to be parsed by the packet reader.
  *
  * @author Pejman Ghorbanzade
- * @see ActivityLogger
- * @see Uploader
+ * @see PacketReader
+ * @see SerialReader
  */
-public final class FileQueue {
+public final class SerialQueue {
 
   private final ConfigManager cfg;
-  private final Vector<Path> queue = new Vector<Path>();
+  private final Vector<String> queue = new Vector<String>();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * A file queue is a container of paths to files that need to be uploaded
-   * to the remote server by uploader. The queue is filled with paths to
-   * files written by the activity logger.
+   * A serial queue is a container of data received from a serial ports
+   * through serial reader. The data is fetches and parsed by the packet
+   * reader which eventually updates the body posture based on its content.
    *
    * @param cfg main configuration parameters of the program
    */
-  public FileQueue(ConfigManager cfg) {
+  public SerialQueue(ConfigManager cfg) {
     this.cfg = cfg;
   }
 
   /**
-   * This method is called by uploader to check if there are files waiting
-   * to be uploaded to the remote server.
+   * This method is called by packet reader to check if there is data
+   * received from serial port that waiting to be parsed.
    *
    * @return whether the queue is empty or not
    */
@@ -48,12 +47,13 @@ public final class FileQueue {
   }
 
   /**
-   * This method dequeues an element from the File queue and returns it
-   * to the uploader object to upload the file to the remote server.
+   * This method dequeues an element from the serial queue and hands it
+   * to the packet reader to parse it and construct either a packet
+   * or an activity code.
    *
    * @return the first element of the queue or null if queue is empty
    */
-  public Path get() {
+  public String get() {
     return (this.queue.isEmpty()) ? null : this.queue.remove(0);
   }
 

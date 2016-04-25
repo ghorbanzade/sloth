@@ -9,37 +9,36 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.nio.file.Path;
 import java.util.Vector;
 
 /**
- * This class defines a queue of file paths that are fetched by uploader
- * to be transfered to the remote server.
+ * This class defines a queue of unprocessed packet objects that are produced
+ * by packet reader and are fetched by packet processor.
  *
  * @author Pejman Ghorbanzade
- * @see ActivityLogger
- * @see Uploader
+ * @see Packet
+ * @see PacketQueue
+ * @see Posture
  */
-public final class FileQueue {
+public final class PacketQueue {
 
   private final ConfigManager cfg;
-  private final Vector<Path> queue = new Vector<Path>();
+  private final Vector<Packet> queue = new Vector<Packet>();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * A file queue is a container of paths to files that need to be uploaded
-   * to the remote server by uploader. The queue is filled with paths to
-   * files written by the activity logger.
+   * A packet queue is a container of raw unprocessed packets that are
+   * waiting to be processed by the packet processor.
    *
    * @param cfg main configuration parameters of the program
    */
-  public FileQueue(ConfigManager cfg) {
+  public PacketQueue(ConfigManager cfg) {
     this.cfg = cfg;
   }
 
   /**
-   * This method is called by uploader to check if there are files waiting
-   * to be uploaded to the remote server.
+   * This method is called by packet processor to check if there are packets
+   * waiting to be processed.
    *
    * @return whether the queue is empty or not
    */
@@ -48,12 +47,12 @@ public final class FileQueue {
   }
 
   /**
-   * This method dequeues an element from the File queue and returns it
-   * to the uploader object to upload the file to the remote server.
+   * This method dequeues an element from the packet queue and hands it
+   * to the packet processor to be processed and used to update the posture.
    *
    * @return the first element of the queue or null if queue is empty
    */
-  public Path get() {
+  public Packet get() {
     return (this.queue.isEmpty()) ? null : this.queue.remove(0);
   }
 

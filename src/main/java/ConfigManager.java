@@ -26,17 +26,14 @@ import java.util.Properties;
  */
 public final class ConfigManager {
 
-  /**
-   * Since the configuration file to be read is a java properties file
-   * an object of this class would have a properties attribute to hold
-   * the properties in memory.
-   */
   private final String path;
   private final Properties config = new Properties();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * Constructing a config manager object should not be expensive.
+   * Since the configuration file to be read is a java properties file
+   * an object of this class would have a properties attribute to hold
+   * the properties in memory.
    *
    * @param path the path to the properties file
    */
@@ -115,7 +112,7 @@ public final class ConfigManager {
   }
 
   /**
-   *
+   * Permenantly stores current properties in the file.
    */
   public void save() {
     try (FileOutputStream fos = new FileOutputStream(new File(this.path))) {

@@ -20,7 +20,7 @@ public final class FatalException extends RuntimeException {
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
-   * A fatal exception updated the log file with the class name that caused it.
+   * A fatal exception updates the log file with the class name that caused it.
    *
    * @param cls the class from which this exception is thrown
    */

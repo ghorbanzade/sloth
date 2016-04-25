@@ -12,6 +12,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * This class defines an uploader as a runnable responsible to upload
@@ -22,10 +23,6 @@ import java.io.IOException;
  */
 public final class Uploader implements Runnable {
 
-  /**
-   * Uploader needs the main configuration file and the queue that holds
-   * the files to be uploaded.
-   */
   private final ConfigManager cfg;
   private ConfigManager cfgs;
   private final FTPClient ftp = new FTPClient();
@@ -35,6 +32,9 @@ public final class Uploader implements Runnable {
   /**
    * An uploader is constructed based on the configuration file and the queue
    * from which it should upload the file.
+   *
+   * @param cfg main configuration paramters of the program
+   * @param fq file queue from which files to be uploaded should be read
    */
   public Uploader(ConfigManager cfg, FileQueue fq) {
     this.cfg = cfg;
@@ -71,7 +71,7 @@ public final class Uploader implements Runnable {
       while (!Thread.currentThread().isInterrupted()) {
         try {
           Thread.sleep(this.cfg.getAsInt("server.upload.interval"));
-          if (!this.fq.getQueue().isEmpty()) {
+          if (!this.fq.isEmpty()) {
             this.upload();
           }
         } catch (InterruptedException ex) {
@@ -92,6 +92,19 @@ public final class Uploader implements Runnable {
    * @throws IOException if connection with remote server is disrupted
    */
   private void upload() throws IOException {
+    while (!this.fq.isEmpty()) {
+      this.uploadFile(this.fq.get());
+    }
+  }
+
+  /**
+   * This method contains the logic for uploading a given file to the server.
+   *
+   * @param path the path to the file that should be uploaded
+   * @throws IOException if connection with remote server is disrupted
+   */
+  private void uploadFile(Path path) throws IOException {
+    // TODO
   }
 
   /**
