@@ -8,6 +8,7 @@
 
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
+apply plugin: 'jacoco'
 apply plugin: 'java'
 apply plugin: 'pmd'
 
@@ -47,6 +48,10 @@ task myJavadocs(type: Javadoc) {
     destinationDir = file("./doc/")
 }
 
+jacoco {
+    toolVersion = '0.7.6.201602180812'
+}
+
 checkstyle {
     toolVersion = '6.17'
     ignoreFailures = false
@@ -54,16 +59,44 @@ checkstyle {
 
 pmd {
     toolVersion = '5.4.1'
+    ignoreFailures = false
 }
 
-findbugsMain {
+findbugs {
     ignoreFailures = false
+}
+
+tasks.withType(Checkstyle) {
     reports {
         xml.enabled = false
         html.enabled = true
     }
 }
 
+tasks.withType(Pmd) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+    }
+}
+
 clean {
     delete "log"
 }
+
+check.dependsOn jacocoTestReport

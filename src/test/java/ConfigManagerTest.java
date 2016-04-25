@@ -24,8 +24,8 @@ public class ConfigManagerTest {
    * configuration file.
    */
   @Test
-  public void CreateCfgWithNonExistantFile() {
-    ConfigManager cfg = new ConfigManager("nonexist.properties");
+  public void createCfgWithNonExistantFile() {
+    new ConfigManager("nonexist.properties");
   }
 
   /**
@@ -33,7 +33,7 @@ public class ConfigManagerTest {
    * file.
    */
   @Test
-  public void InitCfgWithExistingFile() {
+  public void initCfgWithExistingFile() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.init();
   }
@@ -43,7 +43,7 @@ public class ConfigManagerTest {
    * in string format.
    */
   @Test
-  public void GetAsStringWithValidKey() {
+  public void getAsStringWithValidKey() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.init();
     assertThat(cfg.getAsString("param1.string"), is("sample.string"));
@@ -54,7 +54,7 @@ public class ConfigManagerTest {
    * getAsInt() should return value associated with valid given key as int.
    */
   @Test
-  public void GetAsIntWithValidKey() {
+  public void getAsIntWithValidKey() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.init();
     assertThat(cfg.getAsInt("param2.int"), is(12345));
@@ -65,7 +65,7 @@ public class ConfigManagerTest {
    * empty string.
    */
   @Test
-  public void GetAsStringWithUninitializedCfg() {
+  public void getAsStringWithUninitializedCfg() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     assertThat(cfg.getAsString("invalid.param"), is(""));
   }
@@ -75,7 +75,7 @@ public class ConfigManagerTest {
    * even if valid key is passed.
    */
   @Test(expected = NumberFormatException.class)
-  public void GetAsIntWithUninitializedCfg() {
+  public void getAsIntWithUninitializedCfg() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.getAsInt("param2.int");
   }
@@ -85,7 +85,7 @@ public class ConfigManagerTest {
    * exist in the property list.
    */
   @Test
-  public void GetAsStringWithInvalidKey() {
+  public void getAsStringWithInvalidKey() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.init();
     assertThat(cfg.getAsString("invalid.param"), is(""));
@@ -96,7 +96,7 @@ public class ConfigManagerTest {
    * throw an exception.
    */
   @Test(expected = NumberFormatException.class)
-  public void GetAsIntWithInvalidKey() {
+  public void getAsIntWithInvalidKey() {
     ConfigManager cfg = new ConfigManager("/test.properties");
     cfg.init();
     cfg.getAsInt("invalid.param");
