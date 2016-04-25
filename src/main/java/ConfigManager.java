@@ -45,7 +45,9 @@ public final class ConfigManager {
   }
 
   /**
-   *
+   * This method checks whether a given configuration file exists or not.
+   * If it exists, it loads the key-value properties to memory. If it does
+   * not exist, it creates the file by calling save.
    */
   public void init() {
     if (ConfigManager.class.getResource(this.path).getFile().isEmpty()) {
@@ -102,10 +104,11 @@ public final class ConfigManager {
   }
 
   /**
+   * A wrapper method that adds or updates a given key-value pair to propery
+   * list.
    *
-   *
-   * @param key
-   * @param value
+   * @param key the key to be updated or added
+   * @param value the value to be assigned to the key
    */
   public void update(String key, String value) {
     this.config.setProperty(key, value);
