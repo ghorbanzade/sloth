@@ -78,10 +78,11 @@ public final class ActivityCode {
    * @return a measure of similarity between this code with another
    */
   public double findSimilarity(ActivityCode act) {
-    // TODO
-    //double[] code1 = act.getCode();
-    //double[] code2 = this.getCode();
-    return 0;
+    double sum = 0;
+    for (int i = 0; i < this.code.length; i++) {
+      sum += Math.exp(-(Math.abs(this.getCode()[i] - act.getCode()[i])));
+    }
+    return sum / this.code.length;
   }
 
 }

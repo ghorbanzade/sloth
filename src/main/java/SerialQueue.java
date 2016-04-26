@@ -21,7 +21,6 @@ import java.util.Vector;
  */
 public final class SerialQueue {
 
-  private final ConfigManager cfg;
   private final Vector<String> queue = new Vector<String>();
   private final Logger log = Logger.getLogger(this.getClass());
 
@@ -29,11 +28,18 @@ public final class SerialQueue {
    * A serial queue is a container of data received from a serial ports
    * through serial reader. The data is fetches and parsed by the packet
    * reader which eventually updates the body posture based on its content.
-   *
-   * @param cfg main configuration parameters of the program
    */
-  public SerialQueue(ConfigManager cfg) {
-    this.cfg = cfg;
+  public SerialQueue() {
+  }
+
+  /**
+   * This method is called by serial reader to put data read from serial port
+   * buffer on queue to be parsed by packet reader.
+   *
+   * @param data data that should be put on queue
+   */
+  public void put(String data) {
+    this.queue.add(data);
   }
 
   /**
