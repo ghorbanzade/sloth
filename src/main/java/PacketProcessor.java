@@ -10,7 +10,8 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * A packet processor is a worker thread whose job is to take raw unprocessed
+ * packets, process them and update the posture based on their information.
  *
  * @author Pejman Ghorbanzade
  * @see Packet
@@ -25,7 +26,9 @@ public final class PacketProcessor implements Runnable {
   private final Posture posture;
 
   /**
-   *
+   * A packet processor is constructed based on the configuration file,
+   * the packet queue from which it takes raw packets and the posture
+   * that it should update based on packets.
    *
    * @param cm main configuration parameters of the program
    * @param pq queue from which packets should be fetched for processing
@@ -38,11 +41,25 @@ public final class PacketProcessor implements Runnable {
   }
 
   /**
-   *
+   * A worker simply takes packets from the packet queue, if available,
+   * processes them and updates the posture based on their information.
    */
   @Override
   public void run() {
-    // TODO
+    while (!Thread.currentThread().isInterrupted()) {
+      try {
+        Thread.sleep(this.cm.getAsInt("packet.processor.sleep.interval"));
+        while (!this.pq.isEmpty()) {
+          Packet packet = this.pq.get();
+          packet.process();
+          this.posture.update(packet.getNode(), packet.getRegion());
+        }
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        log.info("sleep interrupted");
+      }
+    }
+    log.info("packet processor stopped by the main thread");
   }
 
 }

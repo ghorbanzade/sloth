@@ -64,6 +64,16 @@ public final class Packet {
     return this.region;
   }
 
+  /**
+   * This method gives the sensor node that transmitted this packet. It is
+   * used by the packet processor to update the posture.
+   *
+   * @return the object representing the the sensor node that sent this packet
+   */
+  public SensorNode getNode() {
+    return this.node;
+  }
+
   public enum RawData {
 
     /**
