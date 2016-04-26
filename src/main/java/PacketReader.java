@@ -48,7 +48,20 @@ public final class PacketReader implements Runnable {
    */
   @Override
   public void run() {
-    // TODO
+    while (!Thread.currentThread().isInterrupted()) {
+      try {
+        Thread.sleep(this.cm.getAsInt("packet.reader.sleep.interval"));
+        while (!this.sq.isEmpty()) {
+          String data = this.sq.get();
+          // TODO
+          System.out.println(data);
+        }
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        log.info("sleep interrupted");
+      }
+    }
+    log.info("packet reader stopped by the main thread");
   }
 
 }

@@ -30,6 +30,7 @@ public final class SerialQueue {
    * reader which eventually updates the body posture based on its content.
    */
   public SerialQueue() {
+    // intentionally left blank
   }
 
   /**

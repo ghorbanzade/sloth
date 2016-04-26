@@ -10,6 +10,7 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,17 +29,33 @@ public class SlothMain {
   public static void main(String[] args) {
     ResourceManager rm = new ResourceManager();
     ConfigManager cm = new ConfigManager("/config.properties");
+
     SerialQueue sq = new SerialQueue();
+    PacketQueue pq = new PacketQueue();
+    Posture posture = new Posture(cm);
     FileQueue fq = new FileQueue(cm);
+
     Uploader uploader = new Uploader(cm, fq);
     SerialReader sr = new SerialReader(cm, sq);
+    PacketReader pr = new PacketReader(cm, sq, pq, posture);
+
     rm.add(sr);
+
+    ArrayList<Thread> threads = new ArrayList<Thread>();
+    threads.add(new Thread(pr));
+
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       cm.init();
       uploader.init();
+      for (Thread thread: threads) {
+        thread.start();
+      }
       sr.open(cm.getAsString("serial.name"));
       Thread.sleep(10000);
+      for (Thread thread: threads) {
+        thread.interrupt();
+      }
     } catch (InterruptedException ex) {
     } catch (FatalException ex) {
       log.fatal("aborting program. check log file for details.");

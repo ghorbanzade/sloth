@@ -22,18 +22,26 @@ import java.util.Vector;
  */
 public final class PacketQueue {
 
-  private final ConfigManager cfg;
   private final Vector<Packet> queue = new Vector<Packet>();
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
    * A packet queue is a container of raw unprocessed packets that are
    * waiting to be processed by the packet processor.
-   *
-   * @param cfg main configuration parameters of the program
    */
-  public PacketQueue(ConfigManager cfg) {
-    this.cfg = cfg;
+  public PacketQueue() {
+    // intentionally left blank
+  }
+
+  /**
+   * This method is called by packet reader when it parses raw sensor data.
+   * The packet is put on queue, waiting to be fetched by packet processor
+   * for further processing.
+   *
+   * @param packet packet that should be put on queue
+   */
+  public void put(Packet packet) {
+    this.queue.add(packet);
   }
 
   /**

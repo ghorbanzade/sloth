@@ -56,7 +56,7 @@ public final class ResourceManager implements Runnable {
         log.info("closing resource" + resource.getClass().getName());
         resource.close();
       } catch (IOException ex) {
-        log.error("unable to close resource" + resource.getClass().getName());
+        log.error("unable to close resource"+resource.getClass().getSimpleName());
       }
     }
   }
