@@ -26,16 +26,22 @@ public class SlothMain {
    * @param args command line arguments
    */
   public static void main(String[] args) {
+    ResourceManager rm = new ResourceManager();
     ConfigManager cm = new ConfigManager("/config.properties");
+    SerialQueue sq = new SerialQueue();
     FileQueue fq = new FileQueue(cm);
     Uploader uploader = new Uploader(cm, fq);
+    SerialReader sr = new SerialReader(cm, sq);
+    rm.add(sr);
     try {
+      Runtime.getRuntime().addShutdownHook(new Thread(rm));
       cm.init();
       uploader.init();
-      //Thread thread = new Thread(uploader);
-      //thread.start();
-    } catch (RuntimeException ex) {
-      log.error("program aborted immaturely");
+      sr.open(cm.getAsString("serial.name"));
+      Thread.sleep(10000);
+    } catch (InterruptedException ex) {
+    } catch (FatalException ex) {
+      log.fatal("aborting program. check log file for details.");
     }
   }
 

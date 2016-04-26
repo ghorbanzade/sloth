@@ -18,6 +18,7 @@ import gnu.io.UnsupportedCommOperationException;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.TooManyListenersException;
@@ -30,7 +31,7 @@ import java.util.TooManyListenersException;
  * @author Pejman Ghorbanzade
  * @see SerialQueue
  */
-public final class SerialReader implements SerialPortEventListener {
+public final class SerialReader implements SerialPortEventListener, Closeable {
 
   private final Logger log = Logger.getLogger(this.getClass());
   private final ConfigManager cfg;
@@ -56,10 +57,10 @@ public final class SerialReader implements SerialPortEventListener {
    *
    * @throws FatalException if serial port cannot be configured or opened
    */
-  public void open() throws FatalException {
+  public void open(String portName) throws FatalException {
     try {
       this.port = (SerialPort) CommPortIdentifier
-          .getPortIdentifier(this.cfg.getAsString("serial.name"))
+          .getPortIdentifier(portName)
           .open(this.getClass().getName(), this.cfg.getAsInt("serial.timeout"));
       this.port.setSerialPortParams(
           this.cfg.getAsInt("serial.baudrate"),
