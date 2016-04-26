@@ -47,6 +47,10 @@ public class SlothMain {
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       cm.init();
+      Banner.print(cm.getAsString("startup.banner"));
+      Runtime.getRuntime().addShutdownHook(new Thread(()-> {
+          Banner.print(cm.getAsString("shutdown.banner"));
+      }));
       uploader.init();
       for (Thread thread: threads) {
         thread.start();
