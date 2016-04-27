@@ -33,22 +33,21 @@ import java.util.TooManyListenersException;
  */
 public final class SerialReader implements SerialPortEventListener, Closeable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
-  private final ConfigManager cfg;
+  private Config cfg;
   private SerialPort port;
   private SerialQueue sq;
   private BufferedReader input;
+  private static final Logger log = Logger.getLogger(SerialReader.class);
 
   /**
    * A serial reader is constructed based on the configuration file
    * and the serial queue to which new data should be written.
    *
-   * @param cfg main configuration parameters of the program
    * @param sq serial queue to which new data should be written
    */
-  public SerialReader(ConfigManager cfg, SerialQueue sq) {
-    this.cfg = cfg;
+  public SerialReader(SerialQueue sq) {
     this.sq = sq;
+    this.cfg = ConfigManager.get("config/main.properties");
   }
 
   /**

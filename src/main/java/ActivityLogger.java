@@ -19,22 +19,21 @@ import org.apache.log4j.Logger;
  */
 public final class ActivityLogger implements Runnable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
-  private final ConfigManager cm;
+  private final Config cfg;
   private final ActivityQueue aq;
   private final FileQueue fq;
+  private static final Logger log = Logger.getLogger(ActivityLogger.class);
 
   /**
    *
    *
-   * @param cm main configuration parameters of the program
    * @param aq the queue from which activity objects should be fetched for logging
    * @param fq the queue to which names of activity log files should be written
    */
-  public ActivityLogger(ConfigManager cm, ActivityQueue aq, FileQueue fq) {
-    this.cm = cm;
+  public ActivityLogger(ActivityQueue aq, FileQueue fq) {
     this.aq = aq;
     this.fq = fq;
+    this.cfg = ConfigManager.get("config/main.properties");
   }
 
   /**

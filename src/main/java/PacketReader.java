@@ -24,30 +24,26 @@ import org.apache.log4j.Logger;
  */
 public final class PacketReader implements Runnable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
-  private final ConfigManager cm;
+  private final Config cfg;
   private final PacketQueue pq;
   private final Posture posture;
   private final SerialQueue sq;
+  private static final Logger log = Logger.getLogger(PacketReader.class);
 
   /**
-   * A packet reader is constructed based on the configuration file,
-   * the serial queue from which it should read data from, the packet
-   * queue it should put raw data on and the posture to update based on
-   * the processed packets.
+   * A packet reader is constructed based on the serial queue from which
+   * it should read data from, the packet queue it should put raw data on
+   * and the posture to update based on the processed packets.
    *
-   * @param cm main configuration parameters of the program
    * @param sq queue from which sensor data should be read
    * @param pq queue to which unprocessed packets should written
    * @param posture the posture that should be updated with processed packet
    */
-  public PacketReader(
-      ConfigManager cm, SerialQueue sq, PacketQueue pq, Posture posture
-  ) {
-    this.cm = cm;
+  public PacketReader(SerialQueue sq, PacketQueue pq, Posture posture) {
     this.sq = sq;
     this.pq = pq;
     this.posture = posture;
+    this.cfg = ConfigManager.get("config/main.properties");
   }
 
   /**
@@ -57,7 +53,7 @@ public final class PacketReader implements Runnable {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
-        Thread.sleep(this.cm.getAsInt("packet.reader.sleep.interval"));
+        Thread.sleep(this.cfg.getAsInt("packet.reader.sleep.interval"));
         while (!this.sq.isEmpty()) {
           String data = this.sq.get();
           // TODO

@@ -27,38 +27,41 @@ public class SlothMain {
    * @param args command line arguments
    */
   public static void main(String[] args) {
+    Config cfg = ConfigManager.get("config/main.properties");
     ResourceManager rm = new ResourceManager();
-    ConfigManager cm = new ConfigManager("/config.properties");
 
     SerialQueue sq = new SerialQueue();
     PacketQueue pq = new PacketQueue();
-    Posture posture = new Posture(cm);
-    FileQueue fq = new FileQueue(cm);
+    Posture posture = new Posture();
+    ActivityQueue aq = new ActivityQueue();
+    FileQueue fq = new FileQueue();
 
-    Uploader uploader = new Uploader(cm, fq);
-    SerialReader sr = new SerialReader(cm, sq);
-    PacketReader pr = new PacketReader(cm, sq, pq, posture);
-    PacketProcessor pp = new PacketProcessor(cm, pq, posture);
+    SerialReader sr = new SerialReader(sq);
+    PacketReader pr = new PacketReader(sq, pq, posture);
+    PacketProcessor pp = new PacketProcessor(pq, posture);
+    ActivityLogger al = new ActivityLogger(aq, fq);
+    Uploader uploader = new Uploader(fq);
 
     rm.add(sr);
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(pr));
     threads.add(new Thread(pp));
+    threads.add(new Thread(al));
+    threads.add(new Thread(uploader));
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
-      cm.init();
-      Wsn wsn = WsnManager.getWsn(cm.getAsString("wsn.config.file"));
-      Banner.print(cm.getAsString("startup.banner"));
+      Wsn wsn = WsnManager.getWsn(cfg.getAsString("wsn.config.file"));
+      Banner.print(cfg.getAsString("startup.banner"));
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
-        Banner.print(cm.getAsString("shutdown.banner"));
+        Banner.print(cfg.getAsString("shutdown.banner"));
       }));
       uploader.init();
       for (Thread thread: threads) {
         thread.start();
       }
-      sr.open(cm.getAsString("serial.name"));
+      sr.open(cfg.getAsString("serial.name"));
       Thread.sleep(10000);
     } catch (InterruptedException ex) {
     } catch (FatalException ex) {

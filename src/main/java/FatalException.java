@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public final class FatalException extends RuntimeException {
 
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(FatalException.class);
 
   /**
    * A fatal exception updates the log file with the class name that caused it.

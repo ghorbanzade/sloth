@@ -18,22 +18,21 @@ import org.apache.log4j.Logger;
  */
 public final class Classifier implements Runnable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
-  private final ConfigManager cm;
+  private final Config cfg;
   private final ActivityQueue aq;
   private final Posture posture;
+  private static final Logger log = Logger.getLogger(Classifier.class);
 
   /**
    *
    *
-   * @param cm main configuration parameters of the program
    * @param posture the posture based on which classification should be made
    * @param aq the queue on which classified activity should be put
    */
-  public Classifier(ConfigManager cm, Posture posture, ActivityQueue aq) {
-    this.cm = cm;
+  public Classifier(Posture posture, ActivityQueue aq) {
     this.aq = aq;
     this.posture = posture;
+    this.cfg = ConfigManager.get("config/main.properties");
   }
 
   /**

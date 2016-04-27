@@ -23,8 +23,8 @@ import java.util.ArrayList;
  */
 public final class ResourceManager implements Runnable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
   private final ArrayList<Closeable> resources;
+  private static final Logger log = Logger.getLogger(ResourceManager.class);
 
   /**
    * A resource manager is first created with an empty list of closeable

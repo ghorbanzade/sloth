@@ -22,19 +22,16 @@ import java.util.Vector;
  */
 public final class FileQueue {
 
-  private final ConfigManager cfg;
   private final Vector<Path> queue = new Vector<Path>();
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(FileQueue.class);
 
   /**
    * A file queue is a container of paths to files that need to be uploaded
    * to the remote server by uploader. The queue is filled with paths to
    * files written by the activity logger.
-   *
-   * @param cfg main configuration parameters of the program
    */
-  public FileQueue(ConfigManager cfg) {
-    this.cfg = cfg;
+  public FileQueue() {
+    // intentionally left blank
   }
 
   /**

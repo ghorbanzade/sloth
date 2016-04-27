@@ -30,7 +30,7 @@ public final class Wsn {
 
   private final File file;
   private final HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(Wsn.class);
 
   /**
    * A sensor network is constructed by specifying a file path. If the file

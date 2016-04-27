@@ -20,24 +20,23 @@ import org.apache.log4j.Logger;
  */
 public final class PacketProcessor implements Runnable {
 
-  private final Logger log = Logger.getLogger(this.getClass());
-  private final ConfigManager cm;
+  private final Config cfg;
   private final PacketQueue pq;
   private final Posture posture;
+  private static final Logger log = Logger.getLogger(PacketProcessor.class);
 
   /**
-   * A packet processor is constructed based on the configuration file,
-   * the packet queue from which it takes raw packets and the posture
-   * that it should update based on packets.
+   * A packet processor is constructed based on the packet queue from
+   * which it takes raw packets and the posture that it should update
+   * based on packets.
    *
-   * @param cm main configuration parameters of the program
    * @param pq queue from which packets should be fetched for processing
    * @param posture the posture that should be updated with processed packet
    */
-  public PacketProcessor(ConfigManager cm, PacketQueue pq, Posture posture) {
-    this.cm = cm;
+  public PacketProcessor(PacketQueue pq, Posture posture) {
     this.pq = pq;
     this.posture = posture;
+    this.cfg = ConfigManager.get("config/main.properties");
   }
 
   /**
@@ -48,7 +47,7 @@ public final class PacketProcessor implements Runnable {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
-        Thread.sleep(this.cm.getAsInt("packet.processor.sleep.interval"));
+        Thread.sleep(this.cfg.getAsInt("packet.processor.sleep.interval"));
         while (!this.pq.isEmpty()) {
           Packet packet = this.pq.get();
           packet.process();

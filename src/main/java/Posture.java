@@ -22,19 +22,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class Posture {
 
-  private final ConfigManager cfg;
   private final ConcurrentHashMap<Node, ActivityCode> hm;
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(Posture.class);
 
   /**
    * A posture is actually a wrapper around a hashmap between sensor nodes
    * and their activity code. The posture object is created only once and
    * is updated every time a packet is processed.
-   *
-   * @param cfg main configuration parameters of the program
    */
-  public Posture(ConfigManager cfg) {
-    this.cfg = cfg;
+  public Posture() {
     this.hm = new ConcurrentHashMap<Node, ActivityCode>();
   }
 

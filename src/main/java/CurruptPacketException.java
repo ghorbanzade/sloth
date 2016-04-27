@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 /**
  * This class defines a custom exception that is thrown to hint the packet
- * processor that the packet must be discarded. 
+ * processor that the packet must be discarded.
  *
  * @author Pejman Ghorbanzade
  * @see Packet
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  */
 public final class CurruptPacketException extends RuntimeException {
 
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(CurruptPacketException.class);
 
   /**
    * A currupt packet exception is thrown if a packet is found severely

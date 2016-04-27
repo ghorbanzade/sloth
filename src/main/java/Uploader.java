@@ -23,21 +23,19 @@ import java.nio.file.Path;
  */
 public final class Uploader implements Runnable {
 
-  private final ConfigManager cfg;
-  private ConfigManager cfgs;
+  private Config cfgs;
+  private final Config cfg = ConfigManager.get("config/main.properties");
   private final FTPClient ftp = new FTPClient();
   private final FileQueue fq;
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(Uploader.class);
 
   /**
-   * An uploader is constructed based on the configuration file and the queue
-   * from which it should upload the file.
+   * An uploader is constructed based on the queue from which it should
+   * upload the file.
    *
-   * @param cfg main configuration paramters of the program
    * @param fq file queue from which files to be uploaded should be read
    */
-  public Uploader(ConfigManager cfg, FileQueue fq) {
-    this.cfg = cfg;
+  public Uploader(FileQueue fq) {
     this.fq = fq;
   }
 
@@ -54,8 +52,7 @@ public final class Uploader implements Runnable {
       log.error("configuration file for remote server is missing");
       throw new FatalException(this.getClass());
     }
-    this.cfgs = new ConfigManager(cfgsPath);
-    this.cfgs.init();
+    this.cfgs = ConfigManager.get(cfgsPath);
   }
 
   /**

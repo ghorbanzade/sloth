@@ -24,7 +24,7 @@ public final class Packet {
   private int region;
   private final Node node;
   private final int[] data = new int[RawData.COUNT.getValue()];
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(Packet.class);
 
   /**
    * A packet is constructed by packet reader in case data received from

@@ -24,19 +24,16 @@ import java.util.Vector;
  */
 public final class ActivityQueue {
 
-  private final ConfigManager cfg;
   private final Vector<Activity> queue = new Vector<Activity>();
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(ActivityQueue.class);
 
   /**
    * An activity queue is a container for recognized or learned activities
    * that is used by learner and classifier threads to transfer their product
    * to the activity logger thread.
-   *
-   * @param cfg main configuration parameters of the program
    */
-  public ActivityQueue(ConfigManager cfg) {
-    this.cfg = cfg;
+  public ActivityQueue() {
+    // intentionally left blank
   }
 
   /**

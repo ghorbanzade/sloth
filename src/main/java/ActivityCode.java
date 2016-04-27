@@ -30,7 +30,7 @@ public final class ActivityCode {
    */
   private int count = 0;
   private final int[] code;
-  private final Logger log = Logger.getLogger(this.getClass());
+  private static final Logger log = Logger.getLogger(ActivityCode.class);
 
   /**
    * the posture object is created only once and is updated every time
