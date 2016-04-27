@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public final class Packet {
 
   private int region;
-  private final SensorNode node;
+  private final Node node;
   private final int[] data = new int[RawData.COUNT.getValue()];
   private final Logger log = Logger.getLogger(this.getClass());
 
@@ -35,7 +35,7 @@ public final class Packet {
    * @param node the sensor node from which this packet is received
    * @param data raw data received from the sensor node
    */
-  public Packet(SensorNode node, int[] data) {
+  public Packet(Node node, int[] data) {
     this.node = node;
     for (int i = 0; i < RawData.COUNT.getValue(); i++) {
       this.data[i] = data[i];
@@ -70,7 +70,7 @@ public final class Packet {
    *
    * @return the object representing the the sensor node that sent this packet
    */
-  public SensorNode getNode() {
+  public Node getNode() {
     return this.node;
   }
 

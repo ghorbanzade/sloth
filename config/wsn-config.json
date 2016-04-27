@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "rw",
+    "description": "right wrist"
+  },
+  {
+    "id": 2,
+    "name": "lw",
+    "description": "left wrist"
+  },
+  {
+    "id": 3,
+    "name": "ra",
+    "description": "right arm"
+  },
+  {
+    "id": 4,
+    "name": "la",
+    "description": "left arm"
+  },
+  {
+    "id": 5,
+    "name": "rf",
+    "description": "right foot"
+  },
+  {
+    "id": 6,
+    "name": "lf",
+    "description": "left foot"
+  },
+  {
+    "id": 7,
+    "name": "rt",
+    "description": "right thigh"
+  },
+  {
+    "id": 8,
+    "name": "lt",
+    "description": "left thigh"
+  }
+]

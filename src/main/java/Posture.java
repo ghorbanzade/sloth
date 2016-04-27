@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Pejman Ghorbanzade
  * @see ActivityCode
- * @see SensorNode
+ * @see Node
  */
 public final class Posture {
 
   private final ConfigManager cfg;
-  private final ConcurrentHashMap<SensorNode, ActivityCode> hm;
+  private final ConcurrentHashMap<Node, ActivityCode> hm;
   private final Logger log = Logger.getLogger(this.getClass());
 
   /**
@@ -35,7 +35,7 @@ public final class Posture {
    */
   public Posture(ConfigManager cfg) {
     this.cfg = cfg;
-    this.hm = new ConcurrentHashMap<SensorNode, ActivityCode>();
+    this.hm = new ConcurrentHashMap<Node, ActivityCode>();
   }
 
   /**
@@ -56,7 +56,7 @@ public final class Posture {
    * @param node the node whose activity code should be updated
    * @param region the region with which activity code should be updated
    */
-  public void update(SensorNode node, int region) {
+  public void update(Node node, int region) {
     this.hm.getOrDefault(node, new ActivityCode()).update(region);
   }
 
@@ -66,7 +66,7 @@ public final class Posture {
    * @param node sensor node whose activity code is asked for
    * @return the activity code assigned to the sensor node
    */
-  public ActivityCode get(SensorNode node) {
+  public ActivityCode get(Node node) {
     return this.hm.getOrDefault(node, new ActivityCode());
   }
 
@@ -77,7 +77,7 @@ public final class Posture {
    *
    * @return an enumerated list of keys of the wrapped hashmap
    */
-  public Enumeration<SensorNode> getNodes() {
+  public Enumeration<Node> getNodes() {
     return this.hm.keys();
   }
 

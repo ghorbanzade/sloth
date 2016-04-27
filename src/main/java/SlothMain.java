@@ -38,18 +38,21 @@ public class SlothMain {
     Uploader uploader = new Uploader(cm, fq);
     SerialReader sr = new SerialReader(cm, sq);
     PacketReader pr = new PacketReader(cm, sq, pq, posture);
+    PacketProcessor pp = new PacketProcessor(cm, pq, posture);
 
     rm.add(sr);
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(pr));
+    threads.add(new Thread(pp));
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       cm.init();
+      Wsn wsn = WsnManager.getWsn(cm.getAsString("wsn.config.file"));
       Banner.print(cm.getAsString("startup.banner"));
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
-          Banner.print(cm.getAsString("shutdown.banner"));
+        Banner.print(cm.getAsString("shutdown.banner"));
       }));
       uploader.init();
       for (Thread thread: threads) {
@@ -57,12 +60,13 @@ public class SlothMain {
       }
       sr.open(cm.getAsString("serial.name"));
       Thread.sleep(10000);
-      for (Thread thread: threads) {
-        thread.interrupt();
-      }
     } catch (InterruptedException ex) {
     } catch (FatalException ex) {
       log.fatal("aborting program. check log file for details.");
+    } finally {
+      for (Thread thread: threads) {
+        thread.interrupt();
+      }
     }
   }
 
