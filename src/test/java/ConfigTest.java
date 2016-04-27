@@ -18,7 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
 /**
-* Unit test suit for class config manager test.
+* Unit test suit for config manager and config classes.
 *
 * @author Pejman Ghorbanzade
 */
