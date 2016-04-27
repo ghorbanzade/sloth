@@ -31,15 +31,25 @@ public final class Banner {
    *
    * @param resource path to the resource file to printed
    */
-  public static void print(String resource) {
+  public static void print(String resource) throws FatalException {
     try {
       System.out.print(Resources.toString(
           Resources.getResource(resource), Charsets.UTF_8
       ));
       log.debug("resource file printed on screen");
+    } catch (IllegalArgumentException ex) {
+      log.error("resource file is missing");
+      throw new FatalException(Banner.class);
     } catch (IOException ex) {
       log.error("failed to read resource file");
+      throw new FatalException(Banner.class);
     }
+  }
+
+  /**
+   * Prevent instantiation of this class.
+   */
+  private Banner() {
   }
 
 }
