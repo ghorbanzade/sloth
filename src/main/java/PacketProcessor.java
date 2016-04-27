@@ -54,6 +54,8 @@ public final class PacketProcessor implements Runnable {
           packet.process();
           this.posture.update(packet.getNode(), packet.getRegion());
         }
+      } catch (CurruptPacketException ex) {
+        log.info("currupt packet discarded");
       } catch (InterruptedException ex) {
         Thread.currentThread().interrupt();
         log.info("sleep interrupted");

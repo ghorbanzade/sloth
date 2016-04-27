@@ -25,7 +25,7 @@ public final class FatalException extends RuntimeException {
    * @param cls the class from which this exception is thrown
    */
   public FatalException(Class<?> cls) {
-    log.fatal("fatal exception occured in " + cls.getName());
+    log.fatal("fatal exception occured in " + cls.getSimpleName() + " class");
   }
 
 }

@@ -49,7 +49,7 @@ public final class Uploader implements Runnable {
    * @throws FatalException if the server configuration file is not specified
    */
   public void init() throws FatalException {
-    String cfgsPath = this.cfg.getAsString("server.filename");
+    String cfgsPath = this.cfg.getAsString("config.file.server");
     if (cfgsPath.isEmpty()) {
       log.error("configuration file for remote server is missing");
       throw new FatalException(this.getClass());

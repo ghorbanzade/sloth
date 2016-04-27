@@ -10,7 +10,11 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * A packet reader is a worker thread whose job is to take strings read
+ * from the buffer, parse them to retrieve their information and find which
+ * sensor node sent them and depending on whether they have been previously
+ * processed or not, put them on packet queue for processing or directly
+ * use their information to update the body posture.
  *
  * @author Pejman Ghorbanzade
  * @see Packet
@@ -27,7 +31,10 @@ public final class PacketReader implements Runnable {
   private final SerialQueue sq;
 
   /**
-   *
+   * A packet reader is constructed based on the configuration file,
+   * the serial queue from which it should read data from, the packet
+   * queue it should put raw data on and the posture to update based on
+   * the processed packets.
    *
    * @param cm main configuration parameters of the program
    * @param sq queue from which sensor data should be read
