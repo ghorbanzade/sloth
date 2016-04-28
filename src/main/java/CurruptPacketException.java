@@ -27,7 +27,7 @@ public final class CurruptPacketException extends RuntimeException {
    * must be caught by packet processor.
    */
   public CurruptPacketException() {
-    log.info("currupt packet found");
+    log.info("currupt packet detected");
   }
 
 }

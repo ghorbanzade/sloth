@@ -72,7 +72,8 @@ public final class Uploader implements Runnable {
             this.upload();
           }
         } catch (InterruptedException ex) {
-          log.warn("sleep interrupted");
+          Thread.currentThread().interrupt();
+          log.info("sleep interrupted");
         }
       }
     } catch (IOException ex) {

@@ -60,7 +60,6 @@ public final class Config {
    * @return the value assigned to the given key
    */
   public String getAsString(String key) {
-    log.trace("reading value for key " + key);
     return (this.configs == null) ? "" : this.configs.getProperty(key, "");
   }
 

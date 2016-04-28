@@ -53,7 +53,7 @@ public final class ResourceManager implements Runnable {
     log.info("starting to clean up resources");
     for (Closeable resource: this.resources) {
       try {
-        log.info("closing resource" + resource.getClass().getName());
+        log.info("closing resource " + resource.getClass().getSimpleName());
         resource.close();
       } catch (IOException ex) {
         log.error(
