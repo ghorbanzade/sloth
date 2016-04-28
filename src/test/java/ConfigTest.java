@@ -17,9 +17,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
 
 /**
 * Unit test suit for config manager and config classes.

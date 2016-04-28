@@ -10,8 +10,8 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 import java.lang.NumberFormatException;
-import java.util.StringTokenizer;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
  * A packet reader is a worker thread whose job is to take strings read
@@ -53,7 +53,9 @@ public final class PacketReader implements Runnable {
   }
 
   /**
-   *
+   * A packet reader should read sensor data from serial queue, parse it
+   * to a packet object and put the packet on the packe queue for further
+   * processing.
    */
   @Override
   public void run() {
@@ -65,6 +67,7 @@ public final class PacketReader implements Runnable {
           try {
             Packet packet = this.parse(data);
             log.trace("received packet: " + packet.toString());
+            System.out.println(packet);
             this.pq.put(packet);
           } catch (CurruptPacketException ex) {
             log.info("currupt packet discarded");
@@ -78,7 +81,14 @@ public final class PacketReader implements Runnable {
     log.info("packet reader stopped by the main thread");
   }
 
-  public Packet parse(String string) throws CurruptPacketException {
+  /**
+   * This method parses the received sensor data into a packet object and
+   * throws exception if performing this task is not possible.
+   *
+   * @param string the buffer data received from a sensor node
+   * @throws CurruptPacketException if packet is missing expected information
+   */
+  private Packet parse(String string) throws CurruptPacketException {
     StringTokenizer st = new StringTokenizer(string, "|");
     int[] components = new int[7];
     if (st.countTokens() != components.length) {

@@ -36,7 +36,7 @@ public final class Config {
    * an object of this class would have a properties attribute to hold
    * the properties in memory.
    *
-   * @param path the path to the properties file
+   * @param filename the path to the properties file
    */
   public Config(String filename) {
     this.file = new File(filename);
