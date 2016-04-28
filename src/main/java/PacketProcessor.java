@@ -50,11 +50,13 @@ public final class PacketProcessor implements Runnable {
         Thread.sleep(this.cfg.getAsInt("packet.processor.sleep.interval"));
         while (!this.pq.isEmpty()) {
           Packet packet = this.pq.get();
-          packet.process();
-          this.posture.update(packet.getNode(), packet.getRegion());
+          try {
+            packet.process();
+            this.posture.update(packet.getNode(), packet.getRegion());
+          } catch (CurruptPacketException ex) {
+            log.info("currupt packet discarded");
+          }
         }
-      } catch (CurruptPacketException ex) {
-        log.info("currupt packet discarded");
       } catch (InterruptedException ex) {
         Thread.currentThread().interrupt();
         log.info("sleep interrupted");

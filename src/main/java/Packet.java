@@ -9,6 +9,8 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
+import java.util.StringTokenizer;
+
 /**
  * This class defines a packet as a container of unprocessed raw acceleration
  * data that is queued by packet reader for processing and processed by packet
@@ -25,6 +27,30 @@ public final class Packet {
   private final Node node;
   private final int[] data = new int[RawData.COUNT.getValue()];
   private static final Logger log = Logger.getLogger(Packet.class);
+
+  /**
+   * This static method takes a number of tokens to check whether they can
+   * construct a packet object. It is called by packet reader to see if the
+   * received buffer is a raw unprocessed packet.
+   *
+   * @param st string tokens to be parsed
+   * @return an array of packet components
+   * @throws PacketMismatchException if fails to parse tokens to packet items
+   */
+  public static int[] parse(StringTokenizer st) throws PacketMismatchException {
+    int[] components = new int[RawData.COUNT.getValue()];
+    if (st.countTokens() != components.length) {
+      throw new PacketMismatchException();
+    }
+    try {
+      for (int i = 0; i < components.length; i++) {
+        components[i] = Integer.parseInt(st.nextToken());
+      }
+    } catch (NumberFormatException ex) {
+      throw new PacketMismatchException();
+    }
+    return components;
+  }
 
   /**
    * A packet is constructed by packet reader in case data received from
@@ -97,10 +123,7 @@ public final class Packet {
     ACC_X(0),
     ACC_Y(1),
     ACC_Z(2),
-    GYR_X(3),
-    GYR_Y(4),
-    GYR_Z(5),
-    COUNT(6);
+    COUNT(3);
 
     private final int value;
 

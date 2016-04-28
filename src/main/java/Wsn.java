@@ -60,13 +60,13 @@ public final class Wsn {
   }
 
   /**
-   * This method allows access to a node in the network via its id. The method
-   * returns null if no sensor network with the given id is found on the network.
+   * This method allows access to a node in the network via its id.
    *
    * @param id a unique identifier for the sensor node
-   * @return the sensor node object with the given id or null if id is not known
+   * @return the sensor node object with the given id
+   * @throws NoSuchNodeException if given id is not found in sensor network
    */
-  public Node getNode(int id) {
+  public Node getNode(int id) throws NoSuchNodeException {
     return this.nodes.get(id);
   }
 

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import java.lang.NumberFormatException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 /**
@@ -82,30 +83,26 @@ public final class PacketReader implements Runnable {
   }
 
   /**
-   * This method parses the received sensor data into a packet object and
-   * throws exception if performing this task is not possible.
+   * This method parses the received sensor data into either a packet object
+   * or an activity code object. It throws exception if performing this task
+   * is not possible.
    *
    * @param string the buffer data received from a sensor node
-   * @throws CurruptPacketException if packet is missing expected information
+   * @throws CurruptPacketException if data is missing expected information
    */
   private Packet parse(String string) throws CurruptPacketException {
     StringTokenizer st = new StringTokenizer(string, "|");
-    int[] components = new int[7];
-    if (st.countTokens() != components.length) {
-      throw new CurruptPacketException();
-    }
     try {
-      for (int i = 0; i < components.length; i++) {
-        components[i] = Integer.parseInt(st.nextToken());
-      }
-    } catch (NumberFormatException ex) {
+      Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
+      int[] components = Packet.parse(st);
+      return new Packet(node, components);
+    } catch (NoSuchElementException |
+        NumberFormatException |
+        NoSuchNodeException |
+        PacketMismatchException ex
+    ) {
       throw new CurruptPacketException();
     }
-    Packet packet = new Packet(
-        this.wsn.getNode(components[0]),
-        Arrays.copyOfRange(components, 1, components.length)
-    );
-    return packet;
   }
 
 }
