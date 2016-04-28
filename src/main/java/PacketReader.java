@@ -9,6 +9,10 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
+import java.lang.NumberFormatException;
+import java.util.StringTokenizer;
+import java.util.Arrays;
+
 /**
  * A packet reader is a worker thread whose job is to take strings read
  * from the buffer, parse them to retrieve their information and find which
@@ -24,6 +28,7 @@ import org.apache.log4j.Logger;
  */
 public final class PacketReader implements Runnable {
 
+  private final Wsn wsn;
   private final Config cfg;
   private final PacketQueue pq;
   private final Posture posture;
@@ -44,6 +49,7 @@ public final class PacketReader implements Runnable {
     this.pq = pq;
     this.posture = posture;
     this.cfg = ConfigManager.get("config/main.properties");
+    this.wsn = WsnManager.getWsn(this.cfg.getAsString("config.file.wsn"));
   }
 
   /**
@@ -56,8 +62,13 @@ public final class PacketReader implements Runnable {
         Thread.sleep(this.cfg.getAsInt("packet.reader.sleep.interval"));
         while (!this.sq.isEmpty()) {
           String data = this.sq.get();
-          // TODO
-          System.out.println(data);
+          try {
+            Packet packet = this.parse(data);
+            log.trace("received packet: " + packet.toString());
+            this.pq.put(packet);
+          } catch (CurruptPacketException ex) {
+            log.info("currupt packet discarded");
+          }
         }
       } catch (InterruptedException ex) {
         Thread.currentThread().interrupt();
@@ -65,6 +76,26 @@ public final class PacketReader implements Runnable {
       }
     }
     log.info("packet reader stopped by the main thread");
+  }
+
+  public Packet parse(String string) throws CurruptPacketException {
+    StringTokenizer st = new StringTokenizer(string, "|");
+    int[] components = new int[7];
+    if (st.countTokens() != components.length) {
+      throw new CurruptPacketException();
+    }
+    try {
+      for (int i = 0; i < components.length; i++) {
+        components[i] = Integer.parseInt(st.nextToken());
+      }
+    } catch (NumberFormatException ex) {
+      throw new CurruptPacketException();
+    }
+    Packet packet = new Packet(
+        this.wsn.getNode(components[0]),
+        Arrays.copyOfRange(components, 1, components.length)
+    );
+    return packet;
   }
 
 }

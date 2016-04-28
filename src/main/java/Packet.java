@@ -74,6 +74,21 @@ public final class Packet {
     return this.node;
   }
 
+  /**
+   * This method describes how information about a packet should be printed.
+   *
+   * @return a string containing useful information about the received packet
+   */
+  @Override
+  public String toString() {
+    return String.format("%s %d %d %d",
+        this.node.getName(),
+        this.data[RawData.ACC_X.getValue()],
+        this.data[RawData.ACC_Y.getValue()],
+        this.data[RawData.ACC_Z.getValue()]
+    );
+  }
+
   public enum RawData {
 
     /**
