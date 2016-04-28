@@ -80,4 +80,15 @@ public class NodeTest {
     assertThat(node.getDescription(), is("description"));
   }
 
+  /**
+   * constructor of wsn manager is private.
+   */
+  @Test
+  public void privateConstructor() {
+    Constructor<?>[] constructors = WsnManager.class.getDeclaredConstructors();
+    for (Constructor<?> constructor : constructors) {
+      assertThat(Modifier.isPrivate(constructor.getModifiers()), is(true));
+    }
+  }
+
 }

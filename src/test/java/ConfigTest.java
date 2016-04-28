@@ -11,9 +11,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
@@ -114,7 +118,6 @@ public class ConfigTest {
     Config cfg = ConfigManager.get("src/test/resources/test.properties");
     cfg.update("param4.string", "new key value pair");
     assertThat(cfg.getAsString("param4.string"), is("new key value pair"));
-    
   }
 
   /**
@@ -125,6 +128,23 @@ public class ConfigTest {
     Constructor<?>[] constructors = ConfigManager.class.getDeclaredConstructors();
     for (Constructor<?> constructor : constructors) {
       assertThat(Modifier.isPrivate(constructor.getModifiers()), is(true));
+    }
+  }
+
+  /**
+   * it should be possible to save a non existant file.
+   */
+  @Test
+  public void saveNonExistantFile() {
+    Config cfg = ConfigManager.get("src/test/resources/test2.properties");
+    cfg.update("sample.key", "sample.value");
+    cfg.save();
+    File file = new File("src/test/resources/test2.properties");
+    assertThat(file.isFile(), is(true));
+    try {
+      Files.deleteIfExists(file.toPath());
+    } catch (IOException ex) {
+      fail();
     }
   }
 

@@ -83,6 +83,7 @@ public final class Config {
    * @param value the value to be assigned to the key
    */
   public void update(String key, String value) {
+    log.trace("updated value of key " + key + " to " + value);
     this.configs.setProperty(key, value);
   }
 
@@ -92,6 +93,7 @@ public final class Config {
   public void save() {
     try (FileOutputStream fos = new FileOutputStream(this.file)) {
       this.configs.store(fos, "auto-generated file");
+      log.info("saved configuration file");
     } catch (FileNotFoundException ex) {
       log.error("unable to construct file stream");
     } catch (IOException ex) {
