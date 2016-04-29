@@ -68,7 +68,6 @@ public final class PacketReader implements Runnable {
           try {
             Packet packet = this.parse(data);
             log.trace("received packet: " + packet.toString());
-            System.out.println(packet);
             this.pq.put(packet);
           } catch (CurruptPacketException ex) {
             log.info("currupt packet discarded");
@@ -96,10 +95,10 @@ public final class PacketReader implements Runnable {
       Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
       int[] components = Packet.parse(st);
       return new Packet(node, components);
-    } catch (NoSuchElementException |
-        NumberFormatException |
-        NoSuchNodeException |
-        PacketMismatchException ex
+    } catch (NoSuchElementException
+        | NumberFormatException
+        | NoSuchNodeException
+        | PacketMismatchException ex
     ) {
       throw new CurruptPacketException();
     }

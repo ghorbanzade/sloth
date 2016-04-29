@@ -23,9 +23,8 @@ import java.util.StringTokenizer;
  */
 public final class Packet {
 
-  private int region;
   private final Node node;
-  private final int[] data = new int[RawData.COUNT.getValue()];
+  private final int[] data = new int[Data.COUNT.getValue()];
   private static final Logger log = Logger.getLogger(Packet.class);
 
   /**
@@ -38,7 +37,7 @@ public final class Packet {
    * @throws PacketMismatchException if fails to parse tokens to packet items
    */
   public static int[] parse(StringTokenizer st) throws PacketMismatchException {
-    int[] components = new int[RawData.COUNT.getValue()];
+    int[] components = new int[Data.COUNT.getValue()];
     if (st.countTokens() != components.length) {
       throw new PacketMismatchException();
     }
@@ -63,31 +62,17 @@ public final class Packet {
    */
   public Packet(Node node, int[] data) {
     this.node = node;
-    for (int i = 0; i < RawData.COUNT.getValue(); i++) {
+    for (int i = 0; i < Data.COUNT.getValue(); i++) {
       this.data[i] = data[i];
     }
   }
 
   /**
-   * Once a packet is queued for processing, packet processor calls this method
-   * to calculate the region the packet points to and update the activity code
-   * of the posture object.
-   *
-   * @throws CurruptPacketException if packet is affected by dynamic acceleration
+   * This method updates sensed values with calibration results fetched from
+   * a previously stored calibration object.
    */
-  public void process() throws CurruptPacketException {
+  public void calibrate() {
     // TODO
-  }
-
-  /**
-   * This method gives the region number of the recognition sphere this packet
-   * is pointing to. If the packet is not processed, the return value will be
-   * null.
-   *
-   * @return the region packet is pointing to or null if it is not processed
-   */
-  public int getRegion() {
-    return this.region;
   }
 
   /**
@@ -101,6 +86,17 @@ public final class Packet {
   }
 
   /**
+   * This method gives one of the components of the packet object whose type
+   * matches the given parameter.
+   *
+   * @param component a sensed parameter whose value is called for
+   * @return the value of the given sensed parameter type
+   */
+  public int getComponent(Data component) {
+    return this.data[component.getValue()];
+  }
+
+  /**
    * This method describes how information about a packet should be printed.
    *
    * @return a string containing useful information about the received packet
@@ -109,13 +105,13 @@ public final class Packet {
   public String toString() {
     return String.format("%s %d %d %d",
         this.node.getName(),
-        this.data[RawData.ACC_X.getValue()],
-        this.data[RawData.ACC_Y.getValue()],
-        this.data[RawData.ACC_Z.getValue()]
+        this.data[Data.ACC_X.getValue()],
+        this.data[Data.ACC_Y.getValue()],
+        this.data[Data.ACC_Z.getValue()]
     );
   }
 
-  public enum RawData {
+  public enum Data {
 
     /**
      * Components of a packet in form of enum items.
@@ -133,7 +129,7 @@ public final class Packet {
      *
      * @param value assign a numeric value to each enum item
      */
-    private RawData(int value) {
+    private Data(int value) {
       this.value = value;
     }
 

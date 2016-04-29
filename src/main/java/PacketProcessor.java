@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 public final class PacketProcessor implements Runnable {
 
   private final Config cfg;
+  private final Model model;
   private final PacketQueue pq;
   private final Posture posture;
   private static final Logger log = Logger.getLogger(PacketProcessor.class);
@@ -37,6 +38,9 @@ public final class PacketProcessor implements Runnable {
     this.pq = pq;
     this.posture = posture;
     this.cfg = ConfigManager.get("config/main.properties");
+    this.model = ModelManager.get(
+        this.cfg.getAsInt("recognition.model.segments")
+    );
   }
 
   /**
@@ -51,8 +55,13 @@ public final class PacketProcessor implements Runnable {
         while (!this.pq.isEmpty()) {
           Packet packet = this.pq.get();
           try {
-            packet.process();
-            this.posture.update(packet.getNode(), packet.getRegion());
+            packet.calibrate();
+            int accx = packet.getComponent(Packet.Data.ACC_X);
+            int accy = packet.getComponent(Packet.Data.ACC_Y);
+            int accz = packet.getComponent(Packet.Data.ACC_Z);
+            int region = this.model.getRegion(accx, accy, accz);
+            log.trace("processing packet with region " + region);
+            this.posture.update(packet.getNode(), region);
           } catch (CurruptPacketException ex) {
             log.info("currupt packet discarded");
           }

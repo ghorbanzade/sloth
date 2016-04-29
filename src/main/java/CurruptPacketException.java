@@ -19,7 +19,8 @@ import org.apache.log4j.Logger;
  */
 public final class CurruptPacketException extends RuntimeException {
 
-  private static final Logger log = Logger.getLogger(CurruptPacketException.class);
+  private static final Logger log =
+      Logger.getLogger(CurruptPacketException.class);
 
   /**
    * A currupt packet exception is thrown if a packet is found severely

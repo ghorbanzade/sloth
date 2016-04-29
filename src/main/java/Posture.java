@@ -42,6 +42,7 @@ public final class Posture {
    */
   public void reset() {
     this.hm.clear();
+    log.trace("posture was reset");
   }
 
   /**
@@ -53,7 +54,8 @@ public final class Posture {
    * @param region the region with which activity code should be updated
    */
   public void update(Node node, int region) {
-    this.hm.getOrDefault(node, new ActivityCode()).update(region);
+    this.hm.putIfAbsent(node, new ActivityCode());
+    this.hm.get(node).update(region);
   }
 
   /**

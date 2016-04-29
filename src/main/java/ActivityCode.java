@@ -37,7 +37,10 @@ public final class ActivityCode {
    * a packet is processed.
    */
   public ActivityCode() {
-    this.code = new int[26];
+    Config cfg = ConfigManager.get("config/main.properties");
+    Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
+    this.code = new int[model.getTotalRegions()];
+    log.info("creating activity code");
   }
 
   /**
@@ -48,11 +51,11 @@ public final class ActivityCode {
    * @throws UnsupportedOperationException if packet is not processed
    */
   public void update(int region) throws UnsupportedOperationException {
-    if (this.code.length <= region) {
+    if (this.code.length < region) {
       log.error("region number exceeds activity code size");
       throw new UnsupportedOperationException();
     } else {
-      this.code[region]++;
+      this.code[region - 1]++;
       this.count++;
     }
   }
@@ -83,6 +86,23 @@ public final class ActivityCode {
       sum += Math.exp(-(Math.abs(this.getCode()[i] - act.getCode()[i])));
     }
     return sum / this.code.length;
+  }
+
+  /**
+   * An activity code simply prints number of packets received in each region
+   * since it has been created.
+   *
+   * @return a string representation of this activity code
+   */
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < this.code.length; i++) {
+      sb.append(this.code[i]);
+      sb.append(' ');
+    }
+    sb.append('\n');
+    return sb.toString();
   }
 
 }
