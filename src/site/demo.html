@@ -4,8 +4,49 @@ title: Demo
 permalink: /demo
 ---
 
-<div class='row'>
-	<div class='col-sm-12'>
-		Demo!
-	</div>
+<div data-ng-controller="demo">
+  <div class='row'>
+    <div class='col-sm-8'>
+      <h3>Activities of [[ data.user.first ]] [[ data.user.last ]]</h3>
+      <p data-ng-if="">[[ data.user.first ]]'s network is currently turned off.</p>
+      <p data-ng-if="">[[ data.user.first ]]'s network is currently operational.</p>
+      <hr></hr>
+      <table class="table table-hover" data-ng-if="data.activities.length > 0">
+        <thead>
+        <tr>
+          <th></th>
+          <th class="text-left">Activity</th>
+          <th class="text-center">Start Time</th>
+          <th class="text-center">End Time</th>
+          <th class="text-center">Accuracy</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="activity in data.activities">
+          <td>[[ $index + 1 ]]</td>
+          <td class="text-left capitalize">[[ activity.name ]]</td>
+          <td class="text-center">[[ formatDate(activity.start) | date:'shortTime' ]]</td>
+          <td class="text-center">[[ formatDate(activity.end) | date:'shortTime' ]]</td>
+          <td class="text-center">[[ activity.accuracy ]]%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-warning">
+        <div class="panel-heading">Network Health Metrics</div>
+        <div class="panel-body">
+          <p>All sensor platforms are operational.<p>
+        </div>
+        <ul class="list-group" data-ng-repeat="component in data.metrics">
+          <li class="list-group-item capitalize">
+            [[ component.name ]]
+            <span class='badge'>
+            [[ component.status ? 'ON' : 'OFF' ]]
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

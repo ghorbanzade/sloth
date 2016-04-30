@@ -12,7 +12,7 @@
 		"url": "/demo",
 		"fname": "demo",
 		"menu": true,
-		"js": false,
+		"js": true,
 		"css": false
 	},
 	{
