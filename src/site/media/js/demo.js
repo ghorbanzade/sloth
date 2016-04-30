@@ -1,4 +1,4 @@
-var app = angular.module('sloth', [], function($interpolateProvider) {
+var app = angular.module('sloth', ['angularMoment'], function($interpolateProvider) {
 	$interpolateProvider.startSymbol('[[');
 	$interpolateProvider.endSymbol(']]');
 });
@@ -28,4 +28,11 @@ app.controller('demo', function($scope, $http, $location) {
 	$scope.formatDate = function(date) {
 		return new Date(date.split("-").join("/"));
 	};
+  $scope.isRecent = function(date) {
+    var diff = 1 * 60 * 60 * 1000;
+    var eventTime = new Date(date.split("-").join("/"));
+    var thresholdTime = new Date();
+    thresholdTime.setTime(thresholdTime.getTime() - diff);
+    return (eventTime > thresholdTime) ? true : false;
+  }
 });
