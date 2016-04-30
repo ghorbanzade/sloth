@@ -14,7 +14,7 @@
  * one single packet.
  *
  * A sample packet has the form:
- * |3|15|03|00|06|13|14|0a|2e|00|00|01|
+ * |3|015|003|000|006|013|014|00a|02e|000|000|001|
  *
  * size of the array being transmitted depends on the number of regions
  * on the recognition sphere which is calculated based on THETA_REGIONS
@@ -197,7 +197,7 @@ void process_region(
  * @param the array representing posture
  * @param the size of the array
  */
-void reset_posture(uint8_t *posture, uint8_t posture_size)
+void reset_posture(uint16_t *posture, uint8_t posture_size)
 {
 	for (int i = 0; i < posture_size; i++) {
 		posture[i] = 0;
@@ -211,10 +211,13 @@ void reset_posture(uint8_t *posture, uint8_t posture_size)
  * @param num the integer which should be converted to hexa
  * @param ch a pointer to the string being built
  */
-void uint8_to_hexstr(uint8_t num, char *ch)
+void uint16_to_hexstr(uint16_t num, char *ch)
 {
-	ch[0] = TO_HEX(((num & 0xF0) >> 4));
-	ch[1] = TO_HEX((num & 0x0F));
+	// most significant nibble is always 0
+	// ch[0] = TO_HEX(((num & 0xF000) >> 12));
+	ch[0] = TO_HEX(((num & 0x0F00) >> 8));
+	ch[1] = TO_HEX(((num & 0x00F0) >> 4));
+	ch[2] = TO_HEX((num & 0x000F));
 }
 
 /**
@@ -227,16 +230,16 @@ void uint8_to_hexstr(uint8_t num, char *ch)
  * @param posture the array of activity code
  * @param size of the posture array (equal to number of regions in sphere)
  */
-void build_message(char *ch, uint8_t *posture, uint16_t posture_size)
+void build_message(char *ch, uint16_t *posture, uint16_t posture_size)
 {
 	int i;
 	sprintf(ch, "|%d|", MY);
 	while (*ch != '\0')
 		ch++;
 	for (i = 0; i < posture_size; i++) {
-		uint8_to_hexstr(posture[i], ch);
-		ch[2] = '|';
-		ch = ch + 3;
+		uint16_to_hexstr(posture[i], ch);
+		ch[3] = '|';
+		ch = ch + 4;
 	}
 	*ch++ = '\n';
 	*ch = '\0';
@@ -267,7 +270,7 @@ void loop()
 {
 	unsigned long tic = millis();
 	int16_t raw[ACC_COUNT];
-	uint8_t posture[model.num_region];
+	uint16_t posture[model.num_region];
 	uint8_t region;
 	char message[MSG_LEN];
 	reset_posture(posture, model.num_region);
