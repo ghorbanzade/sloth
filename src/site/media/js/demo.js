@@ -35,4 +35,13 @@ app.controller('demo', function($scope, $http, $location) {
     thresholdTime.setTime(thresholdTime.getTime() - diff);
     return (eventTime > thresholdTime) ? true : false;
   }
+  $scope.countGreens = function(list) {
+    var count = 0;
+    for (i = 0; i < list.length; i++) {
+      if (list[i].status) {
+        count++;
+      }
+    }
+    return count;
+  }
 });
