@@ -6,12 +6,19 @@
 //
 
 /**
- * This program simply reads sensor data from MPU-6050 module,
- * converts the acceleratiton data to the number assigned to a
- * region of the recognition sphere the acceleration data points
- * to and transmits the region number via zigbee module.
+ * This program reads sensor data from MPU-6050 module, converts the
+ * acceleratiton data to the number assigned to a region of the
+ * recognition sphere the acceleration data points to, increments the
+ * element of activity code whose index corresponds to that region and
+ * after an interval of multiple sensor reading, transmits that array in
+ * one single packet.
  *
- * A sample packet has the form: |3|16|
+ * A sample packet has the form:
+ * |3|15|03|00|06|13|14|0a|2e|00|00|01|
+ *
+ * size of the array being transmitted depends on the number of regions
+ * on the recognition sphere which is calculated based on THETA_REGIONS
+ * macro.
  */
 
 #define MY 3                   // Identifier for each sensor board
@@ -22,6 +29,12 @@
 #define MPU 0x68               // I2C address of the MPU-6050
 // function to convert nibble to hex character
 #define TO_HEX(i) (i <= 9 ? '0' + i : 'A' - 10 + i)
+// offset to correct acceleration reading
+#define ACC_OFFSET_X 0
+#define ACC_OFFSET_Y 0
+#define ACC_OFFSET_Z 0
+// the threshold acceleration to interprete sensor reading as currupted
+#define MAX_ACCELERATION 1.2 * 16384
 
 #include <Wire.h>
 
@@ -113,6 +126,45 @@ void read_raw_sensor_data(int16_t *accs)
 }
 
 /**
+ * Depending on how the sensor module is soldered and what resistors have
+ * been used on the module, sensor acceleration readings may have significant
+ * accuracies. To resolve this issue, the following functions adds an offset
+ * value to the sensor readings. These values defined as macros, should be
+ * obtained by uploading the calibrate.ino sketch on each board and monitoring
+ * received packets from the board while it has a steady state (e.g. placed
+ * on a table).
+ *
+ * @param accs acceleration data to be calibrated
+ */
+void calibrate(int16_t *accs)
+{
+	accs[ACC_X] += ACC_OFFSET_X;
+	accs[ACC_Y] += ACC_OFFSET_Y;
+	accs[ACC_Z] += ACC_OFFSET_Z;
+}
+
+/**
+ * Acceleration data read from the sensor are static acceleration together
+ * with dynamic acceleration caused by body movement. In case dynamic
+ * acceleration is not negligible (e.g. the subject is running), recognition
+ * model being used fails to correctly interpret the region numer. This
+ * function makes sure packets affected by dynamic acceleration are discarded
+ * and do not affect the activity code being constructed.
+ *
+ * @param accs acceleration data read from the sensor
+ * @return whether sensor data are severely affected by dynamic acceleration
+ */
+int is_currupt(int16_t *accs)
+{
+	int i;
+	for (i = 0; i < ACC_COUNT; i++) {
+		if (accs[i] > MAX_ACCELERATION)
+			return 1;
+	}
+	return 0;
+}
+
+/**
  * this function converts raw acceleration data to the number assigned to the
  * region they are mapped to. It uses a previously initialized model to reduce
  * the amount of required calculations.
@@ -194,7 +246,8 @@ void build_message(char *ch, uint8_t *posture, uint16_t posture_size)
  * This function initializes the recognition model and prepares the board
  * for reading MPU6050 and transmitting via zigbee module.
  */
-void setup() {
+void setup()
+{
 	init_model(&model);
 	Wire.begin();
 	Wire.beginTransmission(MPU);
@@ -220,6 +273,9 @@ void loop()
 	reset_posture(posture, model.num_region);
 	while (millis() - tic < INTERVAL) {
 		read_raw_sensor_data(&raw[0]);
+		calibrate(&raw[0]);
+		if (is_currupt(&raw[0]))
+			continue;
 		process_region(&raw[0], &region, &model);
 		posture[region - 1]++;
 	}
