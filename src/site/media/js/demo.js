@@ -1,12 +1,12 @@
 var app = angular.module('sloth', ['angularMoment'], function($interpolateProvider) {
-	$interpolateProvider.startSymbol('[[');
-	$interpolateProvider.endSymbol(']]');
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
 });
 
 app.filter('slice', function() {
-	return function(arr, start, end) {
-		return arr.slice(start, end);
-	};
+  return function(arr, start, end) {
+    return arr.slice(start, end);
+  };
 });
 
 app.filter('capitalize', function() {
@@ -15,19 +15,25 @@ app.filter('capitalize', function() {
    }
 });
 
-app.controller('demo', function($scope, $http, $location) {
-	var remote = "http://api.ghorbanzade.com";
-	$scope.loading = true;
-	$scope.url = $location.absUrl();
-	$scope.api = remote;
-	$http.get($scope.api).success(function(response) {
-		$scope.data = angular.fromJson(response);
-	}).finally(function() {
-		$scope.loading = false;
-	});
-	$scope.formatDate = function(date) {
-		return new Date(date.split("-").join("/"));
-	};
+app.controller('demo', function($scope, $http, $location, $interval) {
+  var remote = "http://api.ghorbanzade.com";
+  $scope.loading = true;
+  $scope.url = $location.absUrl();
+  $scope.api = remote;
+  $scope.getData = function() {
+      $http.get($scope.api).success(function(response) {
+      $scope.data = angular.fromJson(response);
+    }).finally(function() {
+      $scope.loading = false;
+    });
+  };
+  $scope.getData();
+  $interval(function() {
+    $scope.getData();
+  }, 10000);
+  $scope.formatDate = function(date) {
+    return new Date(date.split("-").join("/"));
+  };
   $scope.isRecent = function(date) {
     var diff = 1 * 60 * 60 * 1000;
     var eventTime = new Date(date.split("-").join("/"));
