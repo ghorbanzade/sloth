@@ -13,7 +13,7 @@ final class User {
 		$stmt->execute();
 		$activities = array();
 		while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			array_push($activities, new Activity($res));
+			array_push($activities, new Activity($res, $this->id));
 		}
 		return $activities;
 	}
@@ -27,5 +27,8 @@ final class User {
 			array_push($metrics, new SensorMetric($res));
 		}
 		return $metrics;
+	}
+	public function get_id() {
+		return $this->id;
 	}
 }

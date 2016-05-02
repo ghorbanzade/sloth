@@ -8,14 +8,15 @@
 package com.ghorbanzade.sloth;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
@@ -115,15 +116,16 @@ public final class CloudConnector implements Runnable {
   /**
    *
    *
-   * @param acts
-   * @throws IOException
+   * @param acts activity objects to be posted to the cloud
+   * @return true if activities are successfully posted to cloud
+   * @throws IOException if httpclient find error while connecting with remote
    */
   private boolean post(Collection<Activity> acts) throws IOException {
     String postUrl = this.cfg.getAsString("cc.post.url");
     String content = this.prepareToPost(acts);
     HttpClient httpClient = HttpClientBuilder.create().build();
     HttpPost post = new HttpPost(postUrl);
-    post.setEntity(new StringEntity(content, "UTF-8"));
+    post.setEntity(new StringEntity(content, ContentType.APPLICATION_JSON));
     post.setHeader("Content-type", "application/json");
     HttpResponse response = httpClient.execute(post);
     return (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK);
@@ -132,19 +134,23 @@ public final class CloudConnector implements Runnable {
   /**
    *
    *
-   * @param acts
+   * @param acts activity objects to be parsed to a json string
+   * @return a json string ready to be posted to remote server
    */
   private String prepareToPost(Collection<Activity> acts) {
     JsonObject msg = new JsonObject();
-    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    JsonObject user = new JsonObject();
+    user.addProperty("token", this.cfg.getAsString("cc.user.token"));
     JsonArray array = new JsonArray();
     for (Activity act: acts) {
       JsonObject json = new JsonObject();
-      json.addProperty("name", act.getName());
-      json.addProperty("accuracy", act.getAccuracy());
-      json.addProperty("date", sdf.format(act.getDate()));
+      json.addProperty("activity_name", act.getName());
+      json.addProperty("recognition_accuracy", act.getAccuracy());
+      json.addProperty("recognition_date", sdf.format(act.getDate()));
       array.add(json);
     }
+    msg.add("user", user);
     msg.add("activities", array);
     Gson gson = new Gson();
     return gson.toJson(msg);

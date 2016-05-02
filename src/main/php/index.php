@@ -8,8 +8,6 @@ require 'vendor/autoload.php';
 $config = Config::get('sloth');
 $database = Database::get();
 
-$token = "your-token"; // this is going to be posted with user request
-
 function get_user_by_token($token) {
 	$sql = "SELECT user_id, firstname, lastname FROM users WHERE private_token = :private_token";
 	$stmt = Database::get()->prepare($sql);
@@ -19,12 +17,22 @@ function get_user_by_token($token) {
 	return new User($res);
 }
 
-
-$user = get_user_by_token($token);
-$response = array(
-	'user' => $user,
-	'activities' => $user->get_activities(),
-	'metrics' => $user->get_metrics()
-);
-
-print_r(json_encode($response, true));
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	$data = json_decode(file_get_contents("php://input"), true);
+	$user = get_user_by_token($data['user']['token']);
+	$activities = array();
+	foreach ($data['activities'] as &$act) {
+		$activity = new Activity($act, $user->get_id());
+		$activity->log();
+	}
+} else {
+	$token = 'your-token';
+	$user = get_user_by_token($token);
+	$response = array(
+		'user' => $user,
+		'activities' => $user->get_activities(),
+		'metrics' => $user->get_metrics()
+	);
+	header("Content-Type: application/json");
+	echo json_encode($response, true);
+}
