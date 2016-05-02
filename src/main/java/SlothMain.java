@@ -43,6 +43,7 @@ public class SlothMain {
     ArrayList<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(pr));
     threads.add(new Thread(pp));
+    threads.add(new Thread(new CloudConnector()));
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));

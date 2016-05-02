@@ -20,6 +20,7 @@ repositories {
 dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.google.guava:guava:19.0'
+    compile 'commons-io:commons-io:2.5'
     compile 'commons-net:commons-net:3.4'
     compile 'log4j:log4j:1.2.17'
     compile 'org.rxtx:rxtx:2.1.7'
