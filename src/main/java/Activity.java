@@ -51,6 +51,35 @@ public final class Activity {
   }
 
   /**
+   * Returns name of this activity.
+   *
+   * @return name of this activity
+   */
+  public String getName() {
+    return this.name;
+  }
+
+  /**
+   * Returns the accuracy in percent with which this activity has been
+   * classified.
+   *
+   * @return recognition accuracy of this activity
+   */
+  public double getAccuracy() {
+    return this.accuracy;
+  }
+
+  /**
+   * Returns the date this activity was constructed.
+   *
+   * @return the date this activity was constructed
+   */
+  public Date getDate() {
+    return (Date) this.date.clone();
+  }
+
+
+  /**
    * Returns a string representation of this activity, suitable for printing
    * on standard output.
    *
@@ -58,7 +87,11 @@ public final class Activity {
    */
   @Override
   public String toString() {
-    return this.name;
+    StringBuilder sb = new StringBuilder();
+    sb.append(this.date.toString());
+    sb.append(' ');
+    sb.append(this.name);
+    return sb.toString();
   }
 
 }

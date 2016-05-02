@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
  * @see PacketReader
  * @see PacketProcessor
  * @see PacketQueue
+ * @see Parser
  */
 public abstract class Packet {
 
@@ -31,7 +32,6 @@ public abstract class Packet {
    * the sensor node from which it is received.
    *
    * @param node the sensor node from which this packet is received
-   * @param data raw data received from the sensor node
    */
   public Packet(Node node) {
     this.node = node;
