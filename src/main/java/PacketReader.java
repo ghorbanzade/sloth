@@ -43,8 +43,8 @@ public final class PacketReader implements Runnable {
     this.sq = sq;
     this.pq = pq;
     this.cfg = ConfigManager.get("config/main.properties");
-    this.parsers.add(new ActivityCodeParser());
-    this.parsers.add(new RawPacketParser());
+    this.parsers.add(new ActivityCode.Parser());
+    this.parsers.add(new RawPacket.Parser());
   }
 
   /**

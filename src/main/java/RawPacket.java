@@ -9,6 +9,7 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 /**
@@ -98,6 +99,56 @@ public final class RawPacket extends Packet {
      */
     public int getValue() {
       return this.value;
+    }
+
+  }
+
+  /**
+   * This class implements {@link Parser} to define how received data from
+   * a sensor node can be parsed into a raw packet.
+   *
+   * @author Pejman Ghorbanzade
+   * @see Parser
+   */
+  public static class Parser implements com.ghorbanzade.sloth.Parser {
+
+    private Wsn wsn;
+
+    /**
+     * Prepares the wireless sensor network object to perform faster parsing.
+     */
+    public Parser() {
+      Config cfg = ConfigManager.get("config/main.properties");
+      this.wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
+    }
+
+    /**
+     * Check whether a given set of string tokens can be parsed to a raw
+     * packet. It is called by packet reader to see if the received buffer
+     * is a raw unprocessed packet.
+     *
+     * @param st string tokens to be parsed
+     * @return an raw packet object ready to be processed
+     * @throws PacketFormatException if fails to parse tokens into a packet
+     */
+    @Override
+    public Packet parse(StringTokenizer st) throws PacketFormatException {
+      try {
+        Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
+        int[] components = new int[RawPacket.Data.COUNT.getValue()];
+        if (st.countTokens() != components.length) {
+          throw new PacketFormatException();
+        }
+        for (int i = 0; i < components.length; i++) {
+          components[i] = Integer.parseInt(st.nextToken());
+        }
+        return new RawPacket(node, components);
+      } catch (NoSuchElementException
+          | NumberFormatException
+          | NoSuchNodeException ex
+      ) {
+        throw new PacketFormatException();
+      }
     }
 
   }

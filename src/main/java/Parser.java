@@ -12,34 +12,25 @@ import org.apache.log4j.Logger;
 import java.util.StringTokenizer;
 
 /**
- *
+ * This interface is implemented by classes used by packet reader that
+ * may parse a string into a packet object.
  *
  * @author Pejman Ghorbanzade
- * @see ActivityCodeParser
  * @see PacketReader
- * @see RawPacketParser
+ * @see ActivityCode.Parser
+ * @see RawPacket.Parser
  */
-public abstract class Parser {
-
-  protected Wsn wsn;
-  private static final Logger log = Logger.getLogger(Parser.class);
+public interface Parser {
 
   /**
+   * Return a packet object to be put on packet queue for processing by
+   * packet processor. A packet object can either be an activity code
+   * or a packet with raw acceleration data.
    *
+   * @param tokens data components of data transmitted by a sensor node
+   * @return a packet object to be given to packet processor
+   * @throws PacketFormatException if tokens cannot be parsed to a packet
    */
-  public Parser() {
-    Config cfg = ConfigManager.get("config/main.properties");
-    this.wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
-  }
-
-  /**
-   *
-   *
-   * @param tokens
-   * @return
-   * @throws
-   */
-  public abstract Packet parse(StringTokenizer tokens)
-      throws PacketFormatException;
+  public Packet parse(StringTokenizer tokens) throws PacketFormatException;
 
 }

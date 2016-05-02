@@ -11,7 +11,8 @@ import org.apache.log4j.Logger;
 
 import java.lang.UnsupportedOperationException;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * This class wraps recognition window as an array of region numbers whose
@@ -164,6 +165,62 @@ public final class ActivityCode extends Packet {
       sb.append(String.format("%3.1f ", code[i] * 100));
     }
     return sb.toString();
+  }
+
+  /**
+   * This class implements {@link Parser} to define how received data from
+   * a sensor node can be parsed a preprocessed activity code.
+   *
+   * @author Pejman Ghorbanzade
+   * @see Parser
+   */
+  public static class Parser implements com.ghorbanzade.sloth.Parser {
+
+    private Wsn wsn;
+    private Model model;
+    private static final Logger log
+        = Logger.getLogger(ActivityCode.class);
+
+    /**
+     * Prepares the wireless sensor network and model objects to perform
+     * faster parsing.
+     */
+    public Parser() {
+      Config cfg = ConfigManager.get("config/main.properties");
+      this.wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
+      this.model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
+    }
+
+    /**
+     * Checks whether a given set of string tokens can be parsed to an
+     * activity queue. It is called by packet reader to see if the
+     * received buffer is a preprocessed array describing distribution of
+     * packets over the recognition sphere.
+     *
+     * @param st string tokens to be parsed
+     * @return an activity code object to be applied to posture
+     * @throws PacketFormatException if fails to parse tokens into a packet
+     */
+    @Override
+    public Packet parse(StringTokenizer st) throws PacketFormatException {
+      try {
+        Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
+        int[] components = new int[this.model.getTotalRegions()];
+        if (st.countTokens() != components.length) {
+          throw new PacketFormatException();
+        }
+        for (int i = 0; i < components.length; i++) {
+          components[i] = Integer.parseInt(st.nextToken(), 16);
+        }
+        return new ActivityCode(node, components);
+      } catch (NoSuchElementException
+          | NumberFormatException
+          | NoSuchNodeException ex
+      ) {
+        throw new PacketFormatException();
+      }
+    }
+
   }
 
 }
