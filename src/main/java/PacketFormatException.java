@@ -17,17 +17,17 @@ import org.apache.log4j.Logger;
  * @see Packet
  * @see PacketReader
  */
-public final class PacketMismatchException extends RuntimeException {
+public final class PacketFormatException extends RuntimeException {
 
   private static final Logger log =
-      Logger.getLogger(PacketMismatchException.class);
+      Logger.getLogger(PacketFormatException.class);
 
   /**
    * An exception is thrown if a given string tokenizer cannot be converted
    * to components of a packet. This exception is not fatal and must be caught
    * by packet reader.
    */
-  public PacketMismatchException() {
+  public PacketFormatException() {
     // intentionally left blank
   }
 

@@ -9,7 +9,7 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.util.Enumeration;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -47,15 +47,25 @@ public final class Posture {
 
   /**
    * This method updates the posture based on data retrieved from a packet.
-   * Packet reader and packet processor call this method to update the
-   * posture based on information retrieved from a packet.
+   * Packet processor calls this method to update the posture based on
+   * information retrieved from a raw packet.
    *
    * @param node the node whose activity code should be updated
    * @param region the region with which activity code should be updated
    */
   public void update(Node node, int region) {
-    this.hm.putIfAbsent(node, new ActivityCode());
+    this.hm.putIfAbsent(node, new ActivityCode(node));
     this.hm.get(node).update(region);
+  }
+
+  /**
+   *
+   *
+   * @param code
+   */
+  public void update(ActivityCode code) {
+    this.hm.putIfAbsent(code.getNode(), new ActivityCode(code.getNode()));
+    this.hm.get(code.getNode()).update(code);
   }
 
   /**
@@ -65,7 +75,7 @@ public final class Posture {
    * @return the activity code assigned to the sensor node
    */
   public ActivityCode get(Node node) {
-    return this.hm.getOrDefault(node, new ActivityCode());
+    return this.hm.getOrDefault(node, new ActivityCode(node));
   }
 
   /**
@@ -75,8 +85,8 @@ public final class Posture {
    *
    * @return an enumerated list of keys of the wrapped hashmap
    */
-  public Enumeration<Node> getNodes() {
-    return this.hm.keys();
+  public Set<Node> getNodes() {
+    return this.hm.keySet();
   }
 
 }

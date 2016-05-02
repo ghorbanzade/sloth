@@ -10,37 +10,56 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 import java.lang.UnsupportedOperationException;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * This class wraps recognition window as an array of region numbers whose
- * elements are the number of packets occured on the region.
+ * elements are the number of packets mapped to that region.
  *
  * @author Pejman Ghorbanzade
+ * @see ActivityCodeParser
  * @see Classifier
+ * @see Packet
  * @see PacketReader
- * @see PacketProcessor
  * @see Posture
  */
-public final class ActivityCode {
+public final class ActivityCode extends Packet {
 
-  /**
-   * An activity code is simply a wrapper for an array of integers whose
-   * elements represent regions of the recognition sphere.
-   */
-  private int count = 0;
   private final int[] code;
   private static final Logger log = Logger.getLogger(ActivityCode.class);
 
   /**
-   * the posture object is created only once and is updated every time
-   * a packet is processed.
+   * Creates an activity code with an empty region array for a given sensor
+   * node.
+   *
+   * @param node the node for which activity code is created
    */
-  public ActivityCode() {
+  public ActivityCode(Node node) {
+    super(node);
     Config cfg = ConfigManager.get("config/main.properties");
     Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
     this.code = new int[model.getTotalRegions()];
-    log.info("creating activity code");
+    Arrays.fill(code, 0);
+    log.info("created new activity code");
+  }
+
+  /**
+   * Creates an activity code based on contents of a parsed packet. This
+   * constructor is used by {@link ActivityCodeParser}.
+   *
+   * @param node the node for which activity code is created
+   */
+  public ActivityCode(Node node, int[] code)
+      throws UnsupportedOperationException {
+    super(node);
+    Config cfg = ConfigManager.get("config/main.properties");
+    Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
+    if (code.length < model.getTotalRegions()) {
+      throw new UnsupportedOperationException();
+    } else {
+      this.code = Arrays.copyOf(code, model.getTotalRegions());
+    }
   }
 
   /**
@@ -56,7 +75,24 @@ public final class ActivityCode {
       throw new UnsupportedOperationException();
     } else {
       this.code[region - 1]++;
-      this.count++;
+    }
+  }
+
+  /**
+   * Adds all the packets of an activity code to this code preserving their
+   * distribution in different regions of the sphere.
+   *
+   * @param code the activity code whose packets should be added to this code
+   * @throws UnsupportedOperationException if size of given code does not match
+   */
+  public void update(ActivityCode code) throws UnsupportedOperationException {
+    if (this.size() != code.size()) {
+      log.error("incompatible activity code");
+      throw new UnsupportedOperationException();
+    } else {
+      for (int i = 0; i < this.code.length; i++) {
+        this.code[i] += code.getCode(i);
+      }
     }
   }
 
@@ -67,41 +103,66 @@ public final class ActivityCode {
    * @return array containing probabilistic view of an activity code
    */
   private double[] getCode() {
+    int count = 0;
     double[] out = new double[this.code.length];
     for (int i = 0; i < this.code.length; i++) {
-      out[i] = (double) this.code[i] / this.count;
+      count += this.code[i];
+    }
+    for (int i = 0; i < this.code.length; i++) {
+      out[i] = (double) this.code[i] / count;
     }
     return out;
   }
 
   /**
-   * Compares similarity of this object with a given activity code.
+   * Returns the number of packets mapped to the region whose number is
+   * given as parameter.
+   *
+   * @param index index of the element asked for
+   * @return number of packets mapped to the given region number
+   */
+  private int getCode(int index) {
+    return this.code[index];
+  }
+
+  /**
+   * Returns the number of total regions of the model based on which this
+   * activity code is constructed.
+   *
+   * @return the length of the array
+   */
+  private int size() {
+    return this.code.length;
+  }
+
+  /**
+   * Returns how much this activity code is similar to another given activity
+   * code.
    *
    * @param act the activity code whose similarity should be measured
-   * @return a measure of similarity between this code with another
+   * @return a measure of similarity between this code with the given code
    */
   public double findSimilarity(ActivityCode act) {
     double sum = 0;
     for (int i = 0; i < this.code.length; i++) {
       sum += Math.exp(-(Math.abs(this.getCode()[i] - act.getCode()[i])));
     }
-    return sum / this.code.length;
+    return sum / this.size();
   }
 
   /**
-   * An activity code simply prints number of packets received in each region
-   * since it has been created.
+   * Returns a string representation of the activity code as compared with
+   * other activity codes.
    *
    * @return a string representation of this activity code
    */
   @Override
   public String toString() {
+    double[] code = this.getCode();
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < this.code.length; i++) {
-      sb.append(this.code[i]);
-      sb.append(' ');
+    for (int i = 0; i < this.size(); i++) {
+      sb.append(String.format("%3.1f ", code[i] * 100));
     }
-    sb.append('\n');
     return sb.toString();
   }
 

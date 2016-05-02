@@ -37,6 +37,7 @@ public final class WsnManager {
     if (hm.containsKey(filename)) {
       return hm.get(filename);
     } else {
+      log.info("creating new wireless sensor network");
       Wsn wsn = new Wsn(filename);
       hm.put(filename, wsn);
       return wsn;

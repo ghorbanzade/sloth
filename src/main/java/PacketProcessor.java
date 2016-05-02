@@ -54,16 +54,21 @@ public final class PacketProcessor implements Runnable {
         Thread.sleep(this.cfg.getAsInt("packet.processor.sleep.interval"));
         while (!this.pq.isEmpty()) {
           Packet packet = this.pq.get();
-          try {
-            packet.calibrate();
-            int accx = packet.getComponent(Packet.Data.ACC_X);
-            int accy = packet.getComponent(Packet.Data.ACC_Y);
-            int accz = packet.getComponent(Packet.Data.ACC_Z);
-            int region = this.model.getRegion(accx, accy, accz);
-            log.trace("processing packet with region " + region);
-            this.posture.update(packet.getNode(), region);
-          } catch (CurruptPacketException ex) {
-            log.info("currupt packet discarded");
+          if (packet instanceof ActivityCode) {
+            ActivityCode code = (ActivityCode) packet;
+            this.posture.update(code);
+          } else if (packet instanceof RawPacket) {
+            try {
+              RawPacket raw = (RawPacket) packet;
+              int accx = raw.getComponent(RawPacket.Data.ACC_X);
+              int accy = raw.getComponent(RawPacket.Data.ACC_Y);
+              int accz = raw.getComponent(RawPacket.Data.ACC_Z);
+              int region = this.model.getRegion(accx, accy, accz);
+              log.trace("processing packet with region " + region);
+              this.posture.update(packet.getNode(), region);
+            } catch (CurruptPacketException ex) {
+              log.info("currupt packet discarded");
+            }
           }
         }
       } catch (InterruptedException ex) {

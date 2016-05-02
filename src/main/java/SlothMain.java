@@ -33,36 +33,29 @@ public class SlothMain {
     SerialQueue sq = new SerialQueue();
     PacketQueue pq = new PacketQueue();
     Posture posture = new Posture();
-    ActivityQueue aq = new ActivityQueue();
-    FileQueue fq = new FileQueue();
 
     SerialReader sr = new SerialReader(sq);
-    PacketReader pr = new PacketReader(sq, pq, posture);
+    PacketReader pr = new PacketReader(sq, pq);
     PacketProcessor pp = new PacketProcessor(pq, posture);
-    ActivityLogger al = new ActivityLogger(aq, fq);
-    Uploader uploader = new Uploader(fq);
 
     rm.add(sr);
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(pr));
     threads.add(new Thread(pp));
-    threads.add(new Thread(al));
-    threads.add(new Thread(uploader));
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
-      Wsn wsn = WsnManager.getWsn(cfg.getAsString("wsn.config.file"));
+      Wsn wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
       Banner.print(cfg.getAsString("startup.banner"));
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
         Banner.print(cfg.getAsString("shutdown.banner"));
       }));
-      uploader.init();
       for (Thread thread: threads) {
         thread.start();
       }
       sr.open(cfg.getAsString("serial.name"));
-      Thread.sleep(10000);
+      Thread.sleep(cfg.getAsInt("serial.listening.time"));
     } catch (InterruptedException ex) {
     } catch (FatalException ex) {
       log.fatal("aborting program. check log file for details.");
@@ -70,6 +63,9 @@ public class SlothMain {
       for (Thread thread: threads) {
         thread.interrupt();
       }
+    }
+    for (Node node: posture.getNodes()) {
+      System.out.println(posture.get(node));
     }
   }
 

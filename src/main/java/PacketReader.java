@@ -9,54 +9,47 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.lang.NumberFormatException;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
  * A packet reader is a worker thread whose job is to take strings read
- * from the buffer, parse them to retrieve their information and find which
- * sensor node sent them and depending on whether they have been previously
- * processed or not, put them on packet queue for processing or directly
- * use their information to update the body posture.
+ * from the buffer, parse them to retrieve their information and put them
+ * on packet queue for updating the body posture.
  *
  * @author Pejman Ghorbanzade
  * @see Packet
  * @see PacketQueue
- * @see Posture
+ * @see Parser
  * @see SerialQueue
  */
 public final class PacketReader implements Runnable {
 
-  private final Wsn wsn;
   private final Config cfg;
   private final PacketQueue pq;
-  private final Posture posture;
   private final SerialQueue sq;
+  private final ArrayList<Parser> parsers = new ArrayList<Parser>();
   private static final Logger log = Logger.getLogger(PacketReader.class);
 
   /**
    * A packet reader is constructed based on the serial queue from which
-   * it should read data from, the packet queue it should put raw data on
-   * and the posture to update based on the processed packets.
+   * it should read data for parsing and the packet queue on which it
+   * put parsed packets.
    *
    * @param sq queue from which sensor data should be read
-   * @param pq queue to which unprocessed packets should written
-   * @param posture the posture that should be updated with processed packet
+   * @param pq queue to which packets should be written
    */
-  public PacketReader(SerialQueue sq, PacketQueue pq, Posture posture) {
+  public PacketReader(SerialQueue sq, PacketQueue pq) {
     this.sq = sq;
     this.pq = pq;
-    this.posture = posture;
     this.cfg = ConfigManager.get("config/main.properties");
-    this.wsn = WsnManager.getWsn(this.cfg.getAsString("config.file.wsn"));
+    this.parsers.add(new ActivityCodeParser());
+    this.parsers.add(new RawPacketParser());
   }
 
   /**
-   * A packet reader should read sensor data from serial queue, parse it
-   * to a packet object and put the packet on the packe queue for further
-   * processing.
+   * A packet reader should read sensor data from serial queue, parse them
+   * into packets and put the packets on the packet queue.
    */
   @Override
   public void run() {
@@ -67,7 +60,6 @@ public final class PacketReader implements Runnable {
           String data = this.sq.get();
           try {
             Packet packet = this.parse(data);
-            log.trace("received packet: " + packet.toString());
             this.pq.put(packet);
           } catch (CurruptPacketException ex) {
             log.info("currupt packet discarded");
@@ -82,26 +74,25 @@ public final class PacketReader implements Runnable {
   }
 
   /**
-   * This method parses the received sensor data into either a packet object
-   * or an activity code object. It throws exception if performing this task
+   * This method parses received data to either a raw packet object or
+   * an activity code object. It throws exception if performing this task
    * is not possible.
    *
-   * @param string the buffer data received from a sensor node
+   * @param data the buffer data received from a sensor node
+   * @return either a raw packet object or an activity code object
    * @throws CurruptPacketException if data is missing expected information
    */
-  private Packet parse(String string) throws CurruptPacketException {
-    StringTokenizer st = new StringTokenizer(string, "|");
-    try {
-      Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
-      int[] components = Packet.parse(st);
-      return new Packet(node, components);
-    } catch (NoSuchElementException
-        | NumberFormatException
-        | NoSuchNodeException
-        | PacketMismatchException ex
-    ) {
-      throw new CurruptPacketException();
+  private Packet parse(String data) throws CurruptPacketException {
+    for (Parser parser: this.parsers) {
+      StringTokenizer tokens = new StringTokenizer(data, "|");
+      try {
+        Packet packet = parser.parse(tokens);
+        return packet;
+      } catch (PacketFormatException ex) {
+        // it is okay if a parser fails to parse a packet
+      }
     }
+    throw new CurruptPacketException();
   }
 
 }

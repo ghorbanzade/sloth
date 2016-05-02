@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 public final class NoSuchNodeException extends RuntimeException {
 
   private static final Logger log =
-      Logger.getLogger(PacketMismatchException.class);
+      Logger.getLogger(NoSuchNodeException.class);
 
   /**
    * An exception is thrown if a given node id is not found in the wireless
