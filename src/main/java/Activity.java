@@ -10,6 +10,7 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  *
@@ -22,18 +23,18 @@ public final class Activity {
   private final String name;
   private boolean classified = true;
   private final double accuracy;
-  private final ActivityCode code;
+  private final HashMap<Node, ActivityCode> posture;
   private static final Logger log = Logger.getLogger(Activity.class);
 
   /**
    *
    *
-   * @param name
+   * @param name name of this activity
    * @param code
    */
-  public Activity(String name, ActivityCode code) {
+  public Activity(String name, HashMap<Node, ActivityCode> posture) {
     this.name = name;
-    this.code = code;
+    this.posture = posture;
     this.accuracy = 100;
     this.classified = false;
   }
@@ -42,11 +43,11 @@ public final class Activity {
    *
    *
    * @param name name of this activity
-   * @param accuracy
+   * @param accuracy accuracy with which the activity is classified
    */
   public Activity(String name, double accuracy) {
-    this.code = null;
     this.name = name;
+    this.posture = null;
     this.accuracy = accuracy;
   }
 
@@ -78,6 +79,14 @@ public final class Activity {
     return (Date) this.date.clone();
   }
 
+  /**
+   * Returns the activity code the describes body posture during this activity
+   *
+   * @return a map of the codes received from sensor nodes
+   */
+  public HashMap<Node, ActivityCode> getPosture() {
+    return this.posture;
+  }
 
   /**
    * Returns a string representation of this activity, suitable for printing

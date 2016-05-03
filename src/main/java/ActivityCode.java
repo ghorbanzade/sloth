@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
  */
 public final class ActivityCode extends Packet {
 
-  private final int[] code;
+  private final double[] code;
   private static final Logger log = Logger.getLogger(ActivityCode.class);
 
   /**
@@ -40,9 +40,8 @@ public final class ActivityCode extends Packet {
     super(node);
     Config cfg = ConfigManager.get("config/main.properties");
     Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
-    this.code = new int[model.getTotalRegions()];
+    this.code = new double[model.getTotalRegions()];
     Arrays.fill(code, 0);
-    log.info("created new activity code");
   }
 
   /**
@@ -51,7 +50,7 @@ public final class ActivityCode extends Packet {
    *
    * @param node the node for which activity code is created
    */
-  public ActivityCode(Node node, int[] code)
+  public ActivityCode(Node node, double[] code)
       throws UnsupportedOperationException {
     super(node);
     Config cfg = ConfigManager.get("config/main.properties");
@@ -103,14 +102,14 @@ public final class ActivityCode extends Packet {
    *
    * @return array containing probabilistic view of an activity code
    */
-  private double[] getCode() {
+  public double[] getCode() {
     int count = 0;
     double[] out = new double[this.code.length];
     for (int i = 0; i < this.code.length; i++) {
       count += this.code[i];
     }
     for (int i = 0; i < this.code.length; i++) {
-      out[i] = (double) this.code[i] / count;
+      out[i] = this.code[i] / count;
     }
     return out;
   }
@@ -122,7 +121,7 @@ public final class ActivityCode extends Packet {
    * @param index index of the element asked for
    * @return number of packets mapped to the given region number
    */
-  private int getCode(int index) {
+  private double getCode(int index) {
     return this.code[index];
   }
 
@@ -162,7 +161,7 @@ public final class ActivityCode extends Packet {
     double[] code = this.getCode();
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < this.size(); i++) {
-      sb.append(String.format("%3.1f ", code[i] * 100));
+      sb.append(String.format("%1.2f ", code[i]));
     }
     return sb.toString();
   }
@@ -205,12 +204,12 @@ public final class ActivityCode extends Packet {
     public Packet parse(StringTokenizer st) throws PacketFormatException {
       try {
         Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
-        int[] components = new int[this.model.getTotalRegions()];
+        double[] components = new double[this.model.getTotalRegions()];
         if (st.countTokens() != components.length) {
           throw new PacketFormatException();
         }
         for (int i = 0; i < components.length; i++) {
-          components[i] = Integer.parseInt(st.nextToken(), 16);
+          components[i] = (double) Integer.parseInt(st.nextToken(), 16);
         }
         return new ActivityCode(node, components);
       } catch (NoSuchElementException

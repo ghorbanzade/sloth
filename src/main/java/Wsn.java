@@ -89,4 +89,13 @@ public final class Wsn {
     // TODO
   }
 
+  /**
+   * Returns number of nodes in the network.
+   *
+   * @return size of the hashmap holding sensor data.
+   */
+  public int getSize() {
+    return this.nodes.size();
+  }
+
 }

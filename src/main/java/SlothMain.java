@@ -33,17 +33,16 @@ public class SlothMain {
     SerialQueue sq = new SerialQueue();
     PacketQueue pq = new PacketQueue();
     Posture posture = new Posture();
+    ActivityQueue aq = new ActivityQueue();
 
     SerialReader sr = new SerialReader(sq);
-    PacketReader pr = new PacketReader(sq, pq);
-    PacketProcessor pp = new PacketProcessor(pq, posture);
-
     rm.add(sr);
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
-    threads.add(new Thread(pr));
-    threads.add(new Thread(pp));
+    threads.add(new Thread(new PacketReader(sq, pq)));
+    threads.add(new Thread(new PacketProcessor(pq, posture)));
     threads.add(new Thread(new CloudConnector()));
+    threads.add(new Thread(new Learner(posture, aq, "walking")));
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
@@ -64,9 +63,6 @@ public class SlothMain {
       for (Thread thread: threads) {
         thread.interrupt();
       }
-    }
-    for (Node node: posture.getNodes()) {
-      System.out.println(posture.get(node));
     }
   }
 
