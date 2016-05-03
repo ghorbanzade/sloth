@@ -25,8 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -106,7 +106,7 @@ public final class CloudConnector implements Runnable {
     while (it.hasNext()) {
       File file = it.next();
       String content = FileUtils.readFileToString(file, "UTF-8");
-      Activity act = gson.fromJson(content, Activity.class);
+      Activity act = gson.fromJson(content, Activity.Classified.class);
       hm.put(file, act);
       if (hm.size() > this.cfg.getAsInt("cc.max.post.size")) {
         break;
