@@ -64,7 +64,7 @@ public final class Config {
   }
 
   /**
-   * A wrapper method to return a numeric value for a given key.
+   * Convenience method to get numeric value of a configuration parameter.
    *
    * @param key the key to fetch value for
    * @return numeric value assigned to the given key
@@ -72,6 +72,17 @@ public final class Config {
    */
   public int getAsInt(String key) throws NumberFormatException {
     return Integer.parseInt(this.getAsString(key));
+  }
+
+  /**
+   * Convenience method to get numeric value of a configuration parameter.
+   *
+   * @param key the key to fetch value for
+   * @return numeric value assigned to the given key
+   * @throws NumberformatException if value cannot be converted to integer
+   */
+  public double getAsDouble(String key) throws NumberFormatException {
+    return Double.parseDouble(this.getAsString(key));
   }
 
   /**

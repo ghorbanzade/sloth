@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
+ * This class defines a classifier as a worker thread that reads the posture
+ * every time interval and compares the posture with those of all learned
+ * activities.
  *
  * @author Pejman Ghorbanzade
  * @see Activity
@@ -25,26 +27,29 @@ public final class Classifier implements Runnable {
   private ArrayList<Activity> acts;
   private final Posture posture;
   private static final Logger log = Logger.getLogger(Classifier.class);
-  private static final Config cfg =
-      ConfigManager.get("config/main.properties");
+  private static final Config cfg = ConfigManager.get("config/main.properties");
 
   /**
-   *
+   * Creates a classifier object that matches the posture being constructed
+   * with all learned activity models to identify the activity whose posture
+   * best matches current posture.
    *
    * @param posture the posture based on which classification should be made
-   * @throws FatalException if learned activity samples cannot be loaded
    */
   public Classifier(Posture posture) {
     this.posture = posture;
   }
 
   /**
-   *
+   * Classifier first loads all learned activity models in memory and then
+   * continues to perform classification until it is interrupted by the
+   * main thread.
    */
   @Override
   public void run() {
     try {
       this.acts = Activity.Learned.loadAll();
+      log.trace("loaded activity models");
       while (!Thread.currentThread().isInterrupted()) {
         try {
           Thread.sleep(cfg.getAsInt("classifier.sleep.interval"));
@@ -63,14 +68,39 @@ public final class Classifier implements Runnable {
   }
 
   /**
-   *
+   * Classifies activity being performed based on a given list of activities.
    *
    * @param acts activities to be compared against
    */
   private void classify(ArrayList<Activity> acts) {
-    String name = "Biking";
-    double accuracy = 96.7;
+    if (this.posture.getNodes().isEmpty()) {
+      return;
+    }
+    double accuracy = Double.MIN_VALUE;
+    String name = null;
+    for (Activity act: acts) {
+      double similarity = 0;
+      for (Node node: this.posture.getNodes()) {
+        ActivityCode code = act.getPosture().get(node);
+        if (code == null) {
+          continue;
+        }
+        similarity += this.posture.get(node).findSimilarity(code);
+      }
+      similarity /= this.posture.getNodes().size();
+      log.trace("similarity: " + similarity);
+      if (similarity > accuracy) {
+        name = act.getName();
+        accuracy = similarity;
+      }
+    }
+    accuracy *= 100;
+    if (accuracy < cfg.getAsInt("classifier.accuracy.threshold")) {
+      log.info("recognition accuracy too low to report activity");
+      return;
+    }
     Activity act = new Activity.Classified(name, accuracy);
+    log.info("identified " + name + " with recognition accuracy " + accuracy);
     this.posture.reset();
     act.log();
   }

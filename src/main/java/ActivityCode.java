@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 public final class ActivityCode extends Packet {
 
   private final double[] code;
+  private static final Config cfg = ConfigManager.get("config/main.properties");
   private static final Logger log = Logger.getLogger(ActivityCode.class);
 
   /**
@@ -38,7 +39,6 @@ public final class ActivityCode extends Packet {
    */
   public ActivityCode(Node node) {
     super(node);
-    Config cfg = ConfigManager.get("config/main.properties");
     Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
     this.code = new double[model.getTotalRegions()];
     Arrays.fill(code, 0);
@@ -53,7 +53,6 @@ public final class ActivityCode extends Packet {
   public ActivityCode(Node node, double[] code)
       throws UnsupportedOperationException {
     super(node);
-    Config cfg = ConfigManager.get("config/main.properties");
     Model model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
     if (code.length < model.getTotalRegions()) {
       throw new UnsupportedOperationException();
