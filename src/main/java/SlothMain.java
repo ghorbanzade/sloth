@@ -9,7 +9,6 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**

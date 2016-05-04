@@ -88,7 +88,7 @@ public final class PacketReader implements Runnable {
       try {
         Packet packet = parser.parse(tokens);
         return packet;
-      } catch (PacketFormatException ex) {
+      } catch (Packet.ParseException ex) {
         // it is okay if a parser fails to parse a packet
       }
     }

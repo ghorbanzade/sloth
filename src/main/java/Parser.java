@@ -7,8 +7,6 @@
 
 package com.ghorbanzade.sloth;
 
-import org.apache.log4j.Logger;
-
 import java.util.StringTokenizer;
 
 /**
@@ -29,8 +27,8 @@ public interface Parser {
    *
    * @param tokens data components of data transmitted by a sensor node
    * @return a packet object to be given to packet processor
-   * @throws PacketFormatException if tokens cannot be parsed to a packet
+   * @throws Packet.ParseException if tokens cannot be parsed to a packet
    */
-  public Packet parse(StringTokenizer tokens) throws PacketFormatException;
+  public Packet parse(StringTokenizer tokens) throws Packet.ParseException;
 
 }

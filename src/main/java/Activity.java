@@ -26,15 +26,16 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.TimeZone;
 
 /**
- *
+ * This class defines an activity as a body posture constructed from activity
+ * codes of different nodes, that is assigned a name. An activity is abstract
+ * and must be declared whether it is a learned or classified instance.
  *
  * @author Pejman Ghorbanzade
  * @see Classifier
@@ -51,10 +52,11 @@ public abstract class Activity {
       ConfigManager.get("config/main.properties");
 
   /**
-   *
+   * Creates a learned activity instance based on the body posture during
+   * observation of the activity.
    *
    * @param name name of this activity
-   * @param posture
+   * @param posture body posture during performance of observed activity
    */
   public Activity(String name, Map<Node, ActivityCode> posture) {
     this.name = name;
@@ -63,7 +65,7 @@ public abstract class Activity {
   }
 
   /**
-   *
+   * Creates a classified activity instance based on its prediction accuracy.
    *
    * @param name name of this activity
    * @param accuracy accuracy with which the activity is classified
@@ -108,7 +110,8 @@ public abstract class Activity {
   }
 
   /**
-   * Returns the activity code the describes body posture during this activity
+   * Returns the activity code the describes body posture during this
+   * activity.
    *
    * @return a map of the codes received from sensor nodes
    */
@@ -348,9 +351,9 @@ public abstract class Activity {
         JsonArray arr = element.getAsJsonObject().get("code").getAsJsonArray();
         double[] code = new double[arr.size()];
         Iterator<JsonElement> codeIterator = arr.iterator();
-        int i = 0;
+        int index = 0;
         while (codeIterator.hasNext()) {
-          code[i++] = codeIterator.next().getAsDouble();
+          code[index++] = codeIterator.next().getAsDouble();
         }
         hm.put(node, new ActivityCode(node, code));
       }

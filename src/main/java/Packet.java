@@ -46,4 +46,24 @@ public abstract class Packet {
     return this.node;
   }
 
+  /**
+   * Custom exception that thrown when ${@link Parser} failes to create
+   * a packet object using the given string tokenizer. This exception is
+   * not fatal and must be caught by packet reader.
+   *
+   * @author Pejman Ghorbanzade
+   * @see Packet
+   */
+  public static final class ParseException extends RuntimeException {
+
+    /**
+     * Custom exception thrown if a given string tokenizer cannot be converted
+     * to components of a packet.
+     */
+    public ParseException() {
+      // intentionally left blank
+    }
+
+  }
+
 }

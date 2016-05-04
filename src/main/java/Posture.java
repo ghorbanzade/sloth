@@ -46,8 +46,8 @@ public final class Posture {
   }
 
   /**
-   * This method updates the posture based on data retrieved from a packet.
-   * Packet processor calls this method to update the posture based on
+   * Updates the posture based on data retrieved from a packet. Packet
+   * processor calls this method to update the posture based on
    * information retrieved from a raw packet.
    *
    * @param node the node whose activity code should be updated
@@ -59,9 +59,11 @@ public final class Posture {
   }
 
   /**
+   * Updates the posture object with a new activity code received by
+   * the sensor network. This method is used by packet processor if the
+   * packet received is already a preprocessed activity code.
    *
-   *
-   * @param code
+   * @param code the code representing distribution of accelerations
    */
   public void update(ActivityCode code) {
     this.hm.putIfAbsent(code.getNode(), new ActivityCode(code.getNode()));
@@ -69,7 +71,7 @@ public final class Posture {
   }
 
   /**
-   * Provides access to activity code mapped to a given sensor node.
+   * Returns the activity code mapped to a given sensor node.
    *
    * @param node sensor node whose activity code is asked for
    * @return the activity code assigned to the sensor node
@@ -79,8 +81,8 @@ public final class Posture {
   }
 
   /**
-   * Provides access to the keys inside the wrapped hashmap. This method is
-   * used by classifier to access activity codes of different sensor nodes
+   * Returns the keys inside the wrapped hashmap. This method is used by
+   * classifier to access activity codes of different sensor nodes
    * one by one.
    *
    * @return an enumerated list of keys of the wrapped hashmap

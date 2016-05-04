@@ -8,14 +8,9 @@
 package com.ghorbanzade.sloth;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 
 /**
 * Unit test suit for model and model manager.
@@ -25,7 +20,8 @@ import java.lang.reflect.Modifier;
 public class ModelTest {
 
   /**
-   *
+   * Checks whether a given number of segments in theta direction will
+   * produce correct number of total regions on the sphere.
    */
   @Test
   public void checkNumTotalRegions() {

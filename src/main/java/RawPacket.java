@@ -129,15 +129,15 @@ public final class RawPacket extends Packet {
      *
      * @param st string tokens to be parsed
      * @return an raw packet object ready to be processed
-     * @throws PacketFormatException if fails to parse tokens into a packet
+     * @throws Packet.ParseException if fails to parse tokens into a packet
      */
     @Override
-    public Packet parse(StringTokenizer st) throws PacketFormatException {
+    public Packet parse(StringTokenizer st) throws Packet.ParseException {
       try {
         Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
         int[] components = new int[RawPacket.Data.COUNT.getValue()];
         if (st.countTokens() != components.length) {
-          throw new PacketFormatException();
+          throw new Packet.ParseException();
         }
         for (int i = 0; i < components.length; i++) {
           components[i] = Integer.parseInt(st.nextToken());
@@ -145,9 +145,9 @@ public final class RawPacket extends Packet {
         return new RawPacket(node, components);
       } catch (NoSuchElementException
           | NumberFormatException
-          | NoSuchNodeException ex
+          | Wsn.NoSuchNodeException ex
       ) {
-        throw new PacketFormatException();
+        throw new Packet.ParseException();
       }
     }
 

@@ -98,4 +98,24 @@ public final class Wsn {
     return this.nodes.size();
   }
 
+  /**
+   * A custom exception thrown when client asks for nonexistant node in
+   * the network.
+   *
+   * @author Pejman Ghorbanzade
+   * @see PacketReader
+   * @see Wsn
+   */
+  public static final class NoSuchNodeException extends RuntimeException {
+
+    /**
+     * An exception is thrown if a given node id is not found in the wireless
+     * sensor network.
+     */
+    public NoSuchNodeException() {
+      log.error("unidentified node requested");
+    }
+
+  }
+
 }

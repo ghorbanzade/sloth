@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.NumberFormatException;
 import java.util.Properties;
 
 
@@ -79,7 +78,7 @@ public final class Config {
    *
    * @param key the key to fetch value for
    * @return numeric value assigned to the given key
-   * @throws NumberformatException if value cannot be converted to integer
+   * @throws NumberFormatException if value cannot be converted to integer
    */
   public double getAsDouble(String key) throws NumberFormatException {
     return Double.parseDouble(this.getAsString(key));

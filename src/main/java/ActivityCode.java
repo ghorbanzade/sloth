@@ -9,7 +9,6 @@ package com.ghorbanzade.sloth;
 
 import org.apache.log4j.Logger;
 
-import java.lang.UnsupportedOperationException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -19,7 +18,7 @@ import java.util.StringTokenizer;
  * elements are the number of packets mapped to that region.
  *
  * @author Pejman Ghorbanzade
- * @see ActivityCodeParser
+ * @see ActivityCode.Parser
  * @see Classifier
  * @see Packet
  * @see PacketReader
@@ -46,7 +45,7 @@ public final class ActivityCode extends Packet {
 
   /**
    * Creates an activity code based on contents of a parsed packet. This
-   * constructor is used by {@link ActivityCodeParser}.
+   * constructor is used by {@link ActivityCode.Parser}.
    *
    * @param node the node for which activity code is created
    */
@@ -184,7 +183,6 @@ public final class ActivityCode extends Packet {
      * faster parsing.
      */
     public Parser() {
-      Config cfg = ConfigManager.get("config/main.properties");
       this.wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
       this.model = ModelManager.get(cfg.getAsInt("recognition.model.segments"));
     }
@@ -197,15 +195,15 @@ public final class ActivityCode extends Packet {
      *
      * @param st string tokens to be parsed
      * @return an activity code object to be applied to posture
-     * @throws PacketFormatException if fails to parse tokens into a packet
+     * @throws Packet.ParseException if fails to parse tokens into a packet
      */
     @Override
-    public Packet parse(StringTokenizer st) throws PacketFormatException {
+    public Packet parse(StringTokenizer st) throws Packet.ParseException {
       try {
         Node node = this.wsn.getNode(Integer.parseInt(st.nextToken()));
         double[] components = new double[this.model.getTotalRegions()];
         if (st.countTokens() != components.length) {
-          throw new PacketFormatException();
+          throw new Packet.ParseException();
         }
         for (int i = 0; i < components.length; i++) {
           components[i] = (double) Integer.parseInt(st.nextToken(), 16);
@@ -213,9 +211,9 @@ public final class ActivityCode extends Packet {
         return new ActivityCode(node, components);
       } catch (NoSuchElementException
           | NumberFormatException
-          | NoSuchNodeException ex
+          | Wsn.NoSuchNodeException ex
       ) {
-        throw new PacketFormatException();
+        throw new Packet.ParseException();
       }
     }
 
