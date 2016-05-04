@@ -103,7 +103,7 @@ public final class ActivityCode extends Packet {
    * @return array containing probabilistic view of an activity code
    */
   public double[] getCode() {
-    int count = 0;
+    double count = 0;
     double[] out = new double[this.code.length];
     for (int i = 0; i < this.code.length; i++) {
       count += this.code[i];

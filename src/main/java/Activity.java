@@ -10,8 +10,11 @@ package com.ghorbanzade.sloth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -22,9 +25,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 /**
@@ -176,6 +182,31 @@ public abstract class Activity {
   public static class Learned extends Activity {
 
     /**
+     * Loads all learned models as a list of learned activities to be used
+     * later for classification.
+     *
+     * @return a list of activities previously learned
+     * @throws IOException if unable to load and parse activity models
+     */
+    public static ArrayList<Activity> loadAll() throws IOException {
+      File dir = new File(cfg.getAsString("dir.learned.activities"));
+      FileUtils.forceMkdir(dir);
+      String[] exts = {"json"};
+      Iterator<File> it = FileUtils.iterateFiles(dir, exts, true);
+      ArrayList<Activity> acts = new ArrayList<Activity>();
+      Gson gson = new GsonBuilder().registerTypeAdapter(
+          Activity.Learned.class, new Activity.Deserializer()
+      ).create();
+      while (it.hasNext()) {
+        File file = it.next();
+        String content = FileUtils.readFileToString(file, "UTF-8");
+        Activity act = gson.fromJson(content, Activity.Learned.class);
+        acts.add(act);
+      }
+      return acts;
+    }
+
+    /**
      * Creates an activity object based on data obtained via real-time model
      * training.
      *
@@ -281,6 +312,50 @@ public abstract class Activity {
       return obj;
     }
 
+  }
+
+  /**
+   * This class defines how a given string in json format can be converted
+   * to an activity object.
+   *
+   * @author Pejman Ghorbanzade
+   * @see Serializer
+   */
+  public static class Deserializer implements JsonDeserializer<Activity> {
+
+    /**
+     * Returns an activity object whose posture can be used by classifier
+     * for similarity measurement purposes.
+     *
+     * @param json json element that should be deserialized
+     * @param type type of the json string
+     * @param context context for deserialization
+     * @return a new activity object that matches given json string
+     * @throws JsonParseException if it fails to parse string to activity object
+     */
+    @Override
+    public Activity deserialize(JsonElement json, Type type,
+        JsonDeserializationContext context) throws JsonParseException {
+      Wsn wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
+      JsonObject obj = json.getAsJsonObject();
+      String name = obj.get("name").getAsString();
+      Iterator<JsonElement> it = obj.get("posture").getAsJsonArray().iterator();
+      HashMap<Node, ActivityCode> hm = new HashMap<Node, ActivityCode>();
+      while (it.hasNext()) {
+        JsonElement element = it.next();
+        int id = element.getAsJsonObject().get("id").getAsInt();
+        Node node = wsn.getNode(id);
+        JsonArray arr = element.getAsJsonObject().get("code").getAsJsonArray();
+        double[] code = new double[arr.size()];
+        Iterator<JsonElement> codeIterator = arr.iterator();
+        int i = 0;
+        while (codeIterator.hasNext()) {
+          code[i++] = codeIterator.next().getAsDouble();
+        }
+        hm.put(node, new ActivityCode(node, code));
+      }
+      return new Activity.Learned(name, hm);
+    }
   }
 
 }
