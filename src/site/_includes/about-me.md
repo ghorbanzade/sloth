@@ -13,18 +13,4 @@ It has been tested on a network with 8 Arduino boards as sensor platforms, one r
 
 Are you impressed? Check out the [Wiki Pages] to learn more about Sloth and what it takes to build your own activity recognition system that can last for days without charging!
 
-### Contribution
-
-Bug reports and pull requests are immensely appreciated.
-
-### License
-
-Source code is released under the [MIT License].
-
-### Contact
-
-For questions or further information please contact [Pejman Ghorbanzade].
-
-[MIT License]: https://github.com/ghorbanzade/sloth/blob/master/LICENSE
 [Wiki Pages]: https://github.com/ghorbanzade/sloth/wiki
-[Pejman Ghorbanzade]: http://www.ghorbanzade.com
