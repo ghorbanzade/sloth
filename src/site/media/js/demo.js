@@ -1,21 +1,21 @@
-var app = angular.module('sloth', ['angularMoment'], function($interpolateProvider) {
-  $interpolateProvider.startSymbol('[[');
-  $interpolateProvider.endSymbol(']]');
+var app = angular.module("sloth", ["angularMoment"], function($interpolateProvider) {
+  $interpolateProvider.startSymbol("[[");
+  $interpolateProvider.endSymbol("]]");
 });
 
-app.filter('slice', function() {
+app.filter("slice", function() {
   return function(arr, start, end) {
     return arr.slice(start, end);
   };
 });
 
-app.filter('capitalize', function() {
+app.filter("capitalize", function() {
   return function(token) {
       return token.charAt(0).toUpperCase() + token.slice(1);
-   }
+   };
 });
 
-app.controller('demo', function($scope, $http, $location, $interval) {
+app.controller("demo", function($scope, $http, $location, $interval) {
   var remote = "http://api.ghorbanzade.com";
   $scope.loading = true;
   $scope.url = $location.absUrl();
@@ -40,8 +40,9 @@ app.controller('demo', function($scope, $http, $location, $interval) {
     var thresholdTime = new Date();
     thresholdTime.setTime(thresholdTime.getTime() - diff);
     return (eventTime > thresholdTime) ? true : false;
-  }
+  };
   $scope.countGreens = function(list) {
+    var i;
     var count = 0;
     for (i = 0; i < list.length; i++) {
       if (list[i].status) {
@@ -49,5 +50,5 @@ app.controller('demo', function($scope, $http, $location, $interval) {
       }
     }
     return count;
-  }
+  };
 });
