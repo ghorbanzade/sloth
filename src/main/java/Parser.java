@@ -29,6 +29,6 @@ public interface Parser {
    * @return a packet object to be given to packet processor
    * @throws Packet.ParseException if tokens cannot be parsed to a packet
    */
-  public Packet parse(StringTokenizer tokens) throws Packet.ParseException;
+  Packet parse(StringTokenizer tokens) throws Packet.ParseException;
 
 }

@@ -22,7 +22,6 @@ public final class Node {
   private int id;
   private String name;
   private String description;
-  private static final Logger log = Logger.getLogger(Node.class);
 
   /**
    * A wireless sensor node has an identifier, a short name and a description

@@ -25,7 +25,6 @@ import java.util.StringTokenizer;
 public final class RawPacket extends Packet {
 
   private final int[] data = new int[Data.COUNT.getValue()];
-  private static final Logger log = Logger.getLogger(RawPacket.class);
 
   /**
    * A packet is constructed by packet reader in case data received from

@@ -23,7 +23,6 @@ import org.apache.log4j.Logger;
 public abstract class Packet {
 
   private final Node node;
-  private static final Logger log = Logger.getLogger(Packet.class);
 
   /**
    * A packet is constructed by packet reader in case data received from

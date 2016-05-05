@@ -10,6 +10,7 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Constructing a configuration object is expensive as it may require
@@ -23,9 +24,7 @@ import java.util.HashMap;
  */
 public final class ConfigManager {
 
-  private static final HashMap<String, Config> hm =
-      new HashMap<String, Config>();
-  private static final Logger log = Logger.getLogger(ConfigManager.class);
+  private static final Map<String, Config> hm = new HashMap<String, Config>();
 
   /**
    * This static method allows client to access configurations of a file

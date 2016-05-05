@@ -22,7 +22,6 @@ import java.util.Vector;
 public final class SerialQueue {
 
   private final Vector<String> queue = new Vector<String>();
-  private static final Logger log = Logger.getLogger(SerialQueue.class);
 
   /**
    * A serial queue is a container of data received from a serial ports

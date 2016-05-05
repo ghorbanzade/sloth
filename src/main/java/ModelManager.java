@@ -23,7 +23,6 @@ import java.util.HashMap;
 public final class ModelManager {
 
   private static final HashMap<Integer, Model> hm = new HashMap<Integer, Model>();
-  private static final Logger log = Logger.getLogger(ModelManager.class);
 
   /**
    * This static method allows client to access a recognition model

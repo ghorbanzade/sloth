@@ -44,7 +44,6 @@ public class SlothMain {
 
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
-      Wsn wsn = WsnManager.getWsn(cfg.getAsString("config.file.wsn"));
       Banner.print(cfg.getAsString("startup.banner"));
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
         Banner.print(cfg.getAsString("shutdown.banner"));

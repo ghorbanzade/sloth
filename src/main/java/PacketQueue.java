@@ -23,7 +23,6 @@ import java.util.Vector;
 public final class PacketQueue {
 
   private final Vector<Packet> queue = new Vector<Packet>();
-  private static final Logger log = Logger.getLogger(PacketQueue.class);
 
   /**
    * A packet queue is a container of raw unprocessed packets that are
