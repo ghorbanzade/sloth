@@ -5,12 +5,13 @@ final class Database {
 		if (static::$database === null) {
 			$config = Config::get()['database'];
 			try {
-				$db = new PDO("mysql:host={$config['host']};dbname={$config['name']}", $config['user'], $config['pass']);
-				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				static::$database = $db;
+				$db_object = new PDO("mysql:host={$config['host']};dbname={$config['name']}", $config['user'], $config['pass']);
+				$db_object->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				static::$database = $db_object;
 			} catch (PDOException $e) {
-				error_log("database connection failed: ".$e->getMessage());
-				die();
+				$message = "database connection failed: ".$e->getMessage();
+				error_log($message);
+				throw new Exception($message);
 			}
 		}
 		return static::$database;
