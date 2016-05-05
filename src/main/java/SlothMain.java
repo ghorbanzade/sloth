@@ -39,9 +39,13 @@ public class SlothMain {
     ArrayList<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(new PacketReader(sq, pq)));
     threads.add(new Thread(new PacketProcessor(pq, posture)));
-    threads.add(new Thread(new CloudConnector()));
-    threads.add(new Thread(new Learner(posture, "walking")));
-
+    if (cfg.getAsString("mode").equals("learn")) {
+      String act = cfg.getAsString("learning.activity");
+      threads.add(new Thread(new Learner(posture, act)));
+    } else if (cfg.getAsString("mode").equals("classify")) {
+      threads.add(new Thread(new CloudConnector()));
+      threads.add(new Thread(new Classifier(posture)));
+    }
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       Banner.print(cfg.getAsString("startup.banner"));

@@ -1,10 +1,8 @@
-# Sloth
-
-An Energy-Efficient Activity Recognition System
+## Sloth: An Energy-Efficient Activity Recognition System
 
 [![Build Status](https://travis-ci.org/ghorbanzade/sloth.svg?branch=master)](https://travis-ci.org/ghorbanzade/sloth)
 
-Human activity recognition is one of the well-established pervasive computing applications.
+Human activity recognition is one of the well-established applications of pervasive computing applications.
 Sensor-based activity recognition blends wearable computing with internet of things to create a wireless network of small-sized embedded sensor platforms that can detect activities of daily living (e.g. walking, eating, cooking, writing) in real-time and over a long period of time.
 
 Even though, recognition of human physical activities in laboratory conditions is fairly straight forward, there are many technical challenges, still to address, in order to meet real-world application requirements.
@@ -19,15 +17,15 @@ It has been tested on a network with 8 Arduino boards as sensor platforms, one r
 
 Are you impressed? Check out the [Wiki Pages] to learn more about Sloth and what it takes to build your own activity recognition system that can last for days without charging!
 
-## Contribution
+### Contribution
 
 Bug reports and pull requests are immensely appreciated.
 
-## License
+### License
 
 Source code is released under the [MIT License].
 
-## Contact
+### Contact
 
 For questions or further information please contact [Pejman Ghorbanzade].
 

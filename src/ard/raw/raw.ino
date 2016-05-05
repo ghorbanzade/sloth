@@ -55,7 +55,8 @@ void read_raw_sensor_data(int16_t *accs)
  * This function prepares the board for reading MPU6050 and transmitting
  * via zigbee module.
  */
-void setup() {
+void setup()
+{
     Wire.begin();
     Wire.beginTransmission(MPU);
     Wire.write(0x6B);                     // PWR_MGMT_1 register
@@ -69,7 +70,8 @@ void setup() {
  * via the zigbee module. It is called repeatedly as long as the board is
  * turned on.
  */
-void loop() {
+void loop()
+{
     unsigned long tic = millis();
     int16_t raw[ACC_COUNT];
     char message[MSG_LEN];
