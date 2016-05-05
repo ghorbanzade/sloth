@@ -7,10 +7,9 @@
 
 package com.ghorbanzade.sloth;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -44,7 +43,7 @@ public final class Wsn {
     this.file = new File(filename);
     if (this.file.isFile()) {
       try {
-        String content = Files.toString(this.file, Charsets.UTF_8);
+        String content = FileUtils.readFileToString(this.file, "UTF-8");
         log.trace("retrieved content of wsn configuration file");
         Gson gson = new Gson();
         Node[] nds = gson.fromJson(content, Node[].class);

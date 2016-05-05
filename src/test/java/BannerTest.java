@@ -35,7 +35,7 @@ public class BannerTest {
     try {
       ByteArrayOutputStream outContent = new ByteArrayOutputStream();
       System.setOut(new PrintStream(outContent, false, "UTF-8"));
-      Banner.print("test.banner");
+      Banner.print("/test.banner");
       assertThat(outContent.toString("UTF-8"), is("\nSome banner\n\n"));
     } catch (UnsupportedEncodingException ex) {
       fail("specified encoding is not supported");
@@ -51,7 +51,7 @@ public class BannerTest {
     try {
       ByteArrayOutputStream outContent = new ByteArrayOutputStream();
       System.setOut(new PrintStream(outContent, false, "UTF-8"));
-      Banner.print("nonexistant.banner");
+      Banner.print("/nonexistant.banner");
     } catch (UnsupportedEncodingException ex) {
       fail("specified encoding is not supported");
     }

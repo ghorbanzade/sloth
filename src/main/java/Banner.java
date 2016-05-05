@@ -7,9 +7,7 @@
 
 package com.ghorbanzade.sloth;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -33,11 +31,11 @@ public final class Banner {
    */
   public static void print(String resource) throws FatalException {
     try {
-      System.out.print(Resources.toString(
-          Resources.getResource(resource), Charsets.UTF_8
+      System.out.print(IOUtils.toString(
+          Banner.class.getResourceAsStream(resource), "UTF-8"
       ));
       log.debug("resource file printed on screen");
-    } catch (IllegalArgumentException ex) {
+    } catch (NullPointerException ex) {
       log.error("resource file is missing");
       throw new FatalException(Banner.class);
     } catch (IOException ex) {

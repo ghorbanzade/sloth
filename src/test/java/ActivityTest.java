@@ -46,7 +46,7 @@ public class ActivityTest {
   @Test
   public void createLearnedActivity() {
     Node node = new Node(1, "name", "description");
-    double code[] = new double[26];
+    double[] code = new double[26];
     Arrays.fill(code, 0);
     ActivityCode ac = new ActivityCode(node, code);
     Map<Node, ActivityCode> posture = new HashMap<Node, ActivityCode>();
