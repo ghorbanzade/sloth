@@ -7,8 +7,6 @@
 
 package com.ghorbanzade.sloth;
 
-import org.apache.log4j.Logger;
-
 /**
  * This class defines a wireless sensor node object which represents a
  * sensor node whose packets are received.

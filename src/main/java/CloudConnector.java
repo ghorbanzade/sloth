@@ -37,7 +37,7 @@ import java.util.Iterator;
  */
 public final class CloudConnector implements Runnable {
 
-  private Config cfg = ConfigManager.get("config/main.properties");
+  private final Config cfg = ConfigManager.get("config/main.properties");
   private static final Logger log = Logger.getLogger(CloudConnector.class);
 
   /**

@@ -7,8 +7,6 @@
 
 package com.ghorbanzade.sloth;
 
-import org.apache.log4j.Logger;
-
 /**
  * This class defines a packet as a container of unprocessed raw acceleration
  * data that is queued by packet reader for processing and processed by packet
