@@ -7,6 +7,8 @@
 
 package com.ghorbanzade.sloth;
 
+import com.ghorbanzade.sloth.cli.Cli;
+
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -27,44 +29,24 @@ public class SlothMain {
    */
   public static void main(String[] args) {
     Config cfg = ConfigManager.get("config/main.properties");
-    ResourceManager rm = new ResourceManager();
-
-    SerialQueue sq = new SerialQueue();
-    PacketQueue pq = new PacketQueue();
-    Posture posture = new Posture();
-
-    SerialReader sr = new SerialReader(sq);
-    rm.add(sr);
-
-    ArrayList<Thread> threads = new ArrayList<Thread>();
-    threads.add(new Thread(new PacketReader(sq, pq)));
-    threads.add(new Thread(new PacketProcessor(pq, posture)));
-    if (cfg.getAsString("mode").equals("learn")) {
-      String act = cfg.getAsString("learning.activity");
-      threads.add(new Thread(new Learner(posture, act)));
-    } else if (cfg.getAsString("mode").equals("classify")) {
-      threads.add(new Thread(new CloudConnector()));
-      threads.add(new Thread(new Classifier(posture)));
-    }
     try {
-      Runtime.getRuntime().addShutdownHook(new Thread(rm));
       Banner.print(cfg.getAsString("startup.banner"));
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
         Banner.print(cfg.getAsString("shutdown.banner"));
       }));
-      for (Thread thread: threads) {
-        thread.start();
+      Cli cli = new Cli();
+      while (true) {
+        cli.execute(cli.getInstruction());
       }
-      sr.open(cfg.getAsString("serial.name"));
-      Thread.sleep(cfg.getAsInt("serial.listening.time"));
-    } catch (InterruptedException ex) {
     } catch (FatalException ex) {
       log.fatal("aborting program. check log file for details.");
-    } finally {
-      for (Thread thread: threads) {
-        thread.interrupt();
-      }
     }
+  }
+
+  /**
+   * Prevents instantiation from this class.
+   */
+  private SlothMain() {
   }
 
 }
