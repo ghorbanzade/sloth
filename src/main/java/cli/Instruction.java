@@ -13,9 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * Defines an instruction as an organized user request to be interpreted
+ * and executed by the CLI.
  *
  * @author Pejman Ghorbanzade
+ * @see Cli
  */
 public final class Instruction {
 
@@ -25,7 +27,8 @@ public final class Instruction {
   private final List<String> options = new ArrayList<String>();
 
   /**
-   *
+   * Creates an object that organizes string literal entered by user into an
+   * instruction with a command name, a set of arguments and a set of options.
    *
    * @param str sequence of characters given by the user
    */
@@ -80,9 +83,9 @@ public final class Instruction {
   }
 
   /**
+   * Returns a string representation of this instruction.
    *
-   *
-   * @return
+   * @return a string representation of this instruction
    */
   public String toString() {
     StringBuilder sb = new StringBuilder(this.name);
@@ -93,6 +96,41 @@ public final class Instruction {
       sb.append(String.format(" -%s", option));
     }
     return sb.toString();
+  }
+
+  /**
+   * Compares the specified object with this instruction for equality. Returns
+   * true if and only if the speficied object is an instruction and its name,
+   * arguments and options are equal to the name, arguments and options of
+   * this instruction.
+   *
+   * @param obj the object to be compared for equality with this instruction
+   * @return true if the specified object is equal to this instruction
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Instruction) {
+      Instruction instr = (Instruction) obj;
+      if (this.name.equals(instr.getName())
+          && this.arguments.equals(instr.getArguments())
+          && this.options.equals(instr.getOptions())
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns the hash code value for this instruction.
+   *
+   * @return the hash code value for this instruction
+   */
+  @Override
+  public int hashCode() {
+    return this.name.hashCode()
+        + this.arguments.hashCode()
+        + this.options.hashCode();
   }
 
 }

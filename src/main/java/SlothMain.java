@@ -11,10 +11,8 @@ import com.ghorbanzade.sloth.cli.Cli;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-
 /**
- *
+ * Main class of sloth.
  *
  * @author Pejman Ghorbanzade
  */
@@ -23,7 +21,8 @@ public class SlothMain {
   private static final Logger log = Logger.getLogger(SlothMain.class);
 
   /**
-   *
+   * Starts a command line interface that interacts with user requests one
+   * at a time.
    *
    * @param args command line arguments
    */
@@ -38,6 +37,8 @@ public class SlothMain {
       while (true) {
         cli.execute(cli.getInstruction());
       }
+    } catch (Cli.GracefulExitException ex) {
+      log.debug("program terminated by user");
     } catch (FatalException ex) {
       log.fatal("aborting program. check log file for details.");
     }

@@ -7,31 +7,42 @@
 
 package com.ghorbanzade.sloth.cli;
 
-import com.ghorbanzade.sloth.FatalException;
+import com.ghorbanzade.sloth.cli.Cli;
 
 /**
- *
+ * Defines a process to be initiated when user enters a corresponding
+ * instruction.
  *
  * @author Pejman Ghorbanzade
  * @see Cli
  * @see InvalidCommandException
  */
-public interface Command {
+public abstract class Command {
 
   /**
-   *
+   * Validates whether a given user instruction has the required components
+   * to be converted into a specific command. By default, there is no
+   * constraint for an instruction to be converted to a command. If a
+   * command requires additional limitations e.g. number of arguments,
+   * specific options, etc. it should override this method.
    *
    * @param instruction the instruction given by the user
-   * @throws InvalidCommandException if instruction is missing required
+   * @throws Cli.InvalidCommandException if instruction is missing required
    *         components to be executed.
    */
-  void check(Instruction instruction) throws InvalidCommandException;
+  public void check(Instruction instruction)
+      throws Cli.InvalidCommandException {
+    // intentionally left blank.
+  }
 
   /**
-   *
+   * Defines the effect that a given command execution will have.
    *
    * @param instruction the instruction given by the user
+   * @throws Cli.Exception case an error occurs during command execution
+   *         or user requests program to be terminated.
    */
-  void execute(Instruction instruction) throws FatalException;
+  public abstract void execute(Instruction instruction)
+      throws Cli.Exception;
 
 }

@@ -5,11 +5,22 @@
 // https://github.com/ghorbanzade/sloth/blob/master/LICENSE
 //
 
-package com.ghorbanzade.sloth;
+package com.ghorbanzade.sloth.cli;
 
+import com.ghorbanzade.sloth.Classifier;
+import com.ghorbanzade.sloth.Config;
+import com.ghorbanzade.sloth.ConfigManager;
+import com.ghorbanzade.sloth.PacketProcessor;
+import com.ghorbanzade.sloth.PacketQueue;
+import com.ghorbanzade.sloth.PacketReader;
+import com.ghorbanzade.sloth.Posture;
+import com.ghorbanzade.sloth.ResourceManager;
+import com.ghorbanzade.sloth.SerialQueue;
+import com.ghorbanzade.sloth.SerialReader;
+
+import com.ghorbanzade.sloth.cli.Cli;
 import com.ghorbanzade.sloth.cli.Command;
 import com.ghorbanzade.sloth.cli.Instruction;
-import com.ghorbanzade.sloth.cli.InvalidCommandException;
 
 import org.apache.log4j.Logger;
 
@@ -17,26 +28,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Defines the command that classifies an activity in real-time.
  *
  * @author Pejman Ghorbanzade
  */
-public final class LearnCommand implements Command {
+public final class ClassifyCommand extends Command {
 
-  private static final Logger log = Logger.getLogger(LearnCommand.class);
+  private static final Logger log = Logger.getLogger(ClassifyCommand.class);
 
+  /**
+   * Classifies the activity being performed in real-time. Reads packets
+   * from serial port, constructs a posture and classifies it based on
+   * previously learned models.
+   *
+   * @param instruction the instruction as given by user
+   * @throws Cli.Exception if an error occurs during classification
+   */
   @Override
-  public void check(Instruction instruction) throws InvalidCommandException {
-    if (instruction.getArguments().isEmpty()) {
-      throw new InvalidCommandException(instruction, "argument is missing");
-    }
-  }
-
-  @Override
-  public void execute(Instruction instruction) throws FatalException {
+  public void execute(Instruction instruction) throws Cli.Exception {
     Config cfg = ConfigManager.get("config/main.properties");
     ResourceManager rm = new ResourceManager();
-    String actName = instruction.getArguments().get(0);
     SerialQueue sq = new SerialQueue();
     PacketQueue pq = new PacketQueue();
     Posture posture = new Posture();
@@ -45,7 +56,7 @@ public final class LearnCommand implements Command {
     List<Thread> threads = new ArrayList<Thread>();
     threads.add(new Thread(new PacketReader(sq, pq)));
     threads.add(new Thread(new PacketProcessor(pq, posture)));
-    threads.add(new Thread(new Learner(posture, actName)));
+    threads.add(new Thread(new Classifier(posture)));
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       for (Thread thread: threads) {
@@ -60,13 +71,6 @@ public final class LearnCommand implements Command {
         thread.interrupt();
       }
     }
-  }
-
-	/**
-   *
-   */
-  public LearnCommand() {
-		// intentionally left empty
   }
 
 }

@@ -9,8 +9,10 @@ package com.ghorbanzade.sloth.cli;
 
 import com.ghorbanzade.sloth.Config;
 import com.ghorbanzade.sloth.ConfigManager;
-import com.ghorbanzade.sloth.FatalException;
-import com.ghorbanzade.sloth.LearnCommand;
+
+import com.ghorbanzade.sloth.cli.ClassifyCommand;
+import com.ghorbanzade.sloth.cli.ExitCommand;
+import com.ghorbanzade.sloth.cli.LearnCommand;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +23,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- *
+ * Defines a command line interface for the Sloth program.
  *
  * @author Pejman Ghorbanzade
  * @see Instruction
@@ -35,35 +37,29 @@ public final class Cli {
   private static final Logger log = Logger.getLogger(Cli.class);
 
   /**
-   *
+   * constructs the CLI with a set of recognizable commands.
    */
   public Cli() {
     this.initCommands();
   }
 
   /**
-   *
+   * Initializes a list of commands recognized by the CLI.
    */
-  public void initCommands() {
+  private void initCommands() {
+    this.commands.put("classify", new ClassifyCommand());
     this.commands.put("learn", new LearnCommand());
-    //this.commands.put("exit", new ExitCommand());
-    //try {
-    //  String[] names = {"learn"};
-    //  for (String name: names) {
-    //    Object obj = Class.forName(name).getConstructor().newInstance();
-    //    this.commands.put(name, (Command) obj);
-    //  }
-    //} catch (Exception ex) {
-    //}
+    this.commands.put("exit", new ExitCommand());
   }
 
   /**
+   * Takes an instruction, converts it to a command and executes it.
    *
-   *
-   * @param instruction
-   * @throws FatalException
+   * @param instruction the instruction as given by the user
+   * @throws Cli.Exception if the command fails to execute user request or
+   *         the user explicitly asks for termination of the program.
    */
-  public void execute(Instruction instruction) throws FatalException {
+  public void execute(Instruction instruction) throws Cli.Exception {
     try {
       Command command = this.parse(instruction);
       command.check(instruction);
@@ -74,12 +70,13 @@ public final class Cli {
   }
 
   /**
+   * Converts user instruction to a given executable command
    *
-   *
-   * @return an executable command object corresponding to the given instruction
-   * @throws InvalidCommandException if given command is not known by the CLI.
+   * @return an executable command corresponding to the given instruction
+   * @throws Cli.InvalidCommandException if given command is not recognized
    */
-  private Command parse(Instruction instruction) throws InvalidCommandException {
+  private Command parse(Instruction instruction)
+      throws Cli.InvalidCommandException {
     String name = instruction.getName();
     if (!this.commands.containsKey(name)) {
       throw new InvalidCommandException(instruction, "command not found");
@@ -88,9 +85,9 @@ public final class Cli {
   }
 
   /**
+   * Returns an organized structure for a given user input to the CLI.
    *
-   *
-   * @return
+   * @return an organized structure for a given user input to the CLI.
    */
   public Instruction getInstruction() {
     while (true) {
@@ -105,9 +102,9 @@ public final class Cli {
   }
 
   /**
+   * Returns the command line prompt.
    *
-   *
-   * @return
+   * @return the command line prompt
    */
   public String getPrompt() {
     return "$ ";
@@ -164,6 +161,86 @@ public final class Cli {
      */
     public List<Instruction> getInstructions() {
       return this.list;
+    }
+
+  }
+
+  /**
+   * The superclass of all exceptions that can occur when using the CLI.
+   *
+   * @author Pejman Ghorbanzade
+   * @see FailedCommandException
+   * @see GracefulExitException
+   * @see InvalidCommandException
+   */
+  public abstract static class Exception extends RuntimeException {
+
+    /**
+     * Logs a debug message for every exception that is thrown.
+     *
+     * @param message the message to be logged for a thrown exception.
+     */
+    public Exception(String message) {
+      log.info(message);
+    }
+
+  }
+
+  /**
+   * Thrown when user enters an instruction which does not correspond to
+   * any command recognized by the CLI.
+   *
+   * @author Pejman Ghorbanzade
+   */
+  public static final class InvalidCommandException
+      extends com.ghorbanzade.sloth.cli.Cli.Exception {
+
+    /**
+     * Prepares a debug message to be logged when this exception is thrown.
+     *
+     * @param instruction the instruction as given by the user
+     * @param message the message to be printed alongside with the instruction
+     *        name.
+     */
+    public InvalidCommandException(Instruction instruction, String message) {
+      super(String.format("%s: %s", instruction.getName(), message));
+    }
+
+  }
+
+  /**
+   * Thrown when user calls the exit command from the CLI.
+   *
+   * @author Pejman Ghorbanzade
+   */
+  public static final class GracefulExitException
+      extends com.ghorbanzade.sloth.cli.Cli.Exception {
+
+    /**
+     * Prepares a debug message to be logged when this exception is thrown.
+     */
+    public GracefulExitException() {
+      super("exit: program terminated per user request");
+    }
+  }
+
+  /**
+   * Thrown when a command encounters irrecoverable error during execution.
+   *
+   * @author Pejman Ghorbanzade
+   * @see Cli.Exception
+   */
+  public static final class FailedCommandException
+      extends com.ghorbanzade.sloth.cli.Cli.Exception {
+
+    /**
+     * Prepares a debug message to be logged when this exception is thrown.
+     *
+     * @param instruction the instruction that failed to successfully execute
+     * @param message the message to be logged when exception is thrown
+     */
+    public FailedCommandException(Instruction instruction, String message) {
+      super(String.format("%s: %s", instruction.getName(), message));
     }
 
   }
