@@ -10,10 +10,6 @@ package com.ghorbanzade.sloth.cli;
 import com.ghorbanzade.sloth.Config;
 import com.ghorbanzade.sloth.ConfigManager;
 
-import com.ghorbanzade.sloth.cli.ClassifyCommand;
-import com.ghorbanzade.sloth.cli.ExitCommand;
-import com.ghorbanzade.sloth.cli.LearnCommand;
-
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

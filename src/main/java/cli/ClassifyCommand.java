@@ -18,10 +18,6 @@ import com.ghorbanzade.sloth.ResourceManager;
 import com.ghorbanzade.sloth.SerialQueue;
 import com.ghorbanzade.sloth.SerialReader;
 
-import com.ghorbanzade.sloth.cli.Cli;
-import com.ghorbanzade.sloth.cli.Command;
-import com.ghorbanzade.sloth.cli.Instruction;
-
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

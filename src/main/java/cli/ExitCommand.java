@@ -7,12 +7,6 @@
 
 package com.ghorbanzade.sloth.cli;
 
-import com.ghorbanzade.sloth.cli.Cli;
-import com.ghorbanzade.sloth.cli.Command;
-import com.ghorbanzade.sloth.cli.Instruction;
-
-import org.apache.log4j.Logger;
-
 /**
  * Frees all resources and terminates the program.
  *

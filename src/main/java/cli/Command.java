@@ -7,8 +7,6 @@
 
 package com.ghorbanzade.sloth.cli;
 
-import com.ghorbanzade.sloth.cli.Cli;
-
 /**
  * Defines a process to be initiated when user enters a corresponding
  * instruction.
