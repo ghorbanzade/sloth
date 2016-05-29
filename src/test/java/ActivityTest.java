@@ -30,14 +30,15 @@ public class ActivityTest {
    */
   @Test
   public void createClassifiedActivity() {
-    Activity act = new Activity.Classified("activity-name", 10.0);
-    assertThat(act.getName(), is("activity-name"));
+    String activityName = "activity-name";
+    Activity act = new Activity.Classified(activityName, 10.0);
+    assertThat(act.getName(), is(activityName));
     assertThat(act.getAccuracy(), is(10.0));
     assertThat(
         (double) act.getDate().getTime(),
         is(closeTo(new Date().getTime(), 1.0))
     );
-    assertThat(act.toString(), is("activity-name"));
+    assertThat(act.toString(), is(activityName));
   }
 
   /**
@@ -45,16 +46,17 @@ public class ActivityTest {
    */
   @Test
   public void createLearnedActivity() {
+    String activityName = "activity-name";
     Node node = new Node(1, "name", "description");
     double[] code = new double[26];
     Arrays.fill(code, 0);
     ActivityCode ac = new ActivityCode(node, code);
     Map<Node, ActivityCode> posture = new HashMap<Node, ActivityCode>();
     posture.put(node, ac);
-    Activity act = new Activity.Learned("activity-name", posture);
-    assertThat(act.getName(), is("activity-name"));
+    Activity act = new Activity.Learned(activityName, posture);
+    assertThat(act.getName(), is(activityName));
     assertThat(act.getPosture(), is(posture));
-    assertThat(act.toString(), is("activity-name"));
+    assertThat(act.toString(), is(activityName));
   }
 
 }
