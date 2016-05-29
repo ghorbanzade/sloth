@@ -77,7 +77,7 @@ tasks.withType(Pmd) {
     ruleSets = [
         "java-basic",
         "java-braces",
-	"java-unusedcode"
+        "java-unusedcode"
     ]
     reports {
         xml.enabled = false
@@ -94,7 +94,7 @@ tasks.withType(FindBugs) {
 
 jacocoTestReport {
     reports {
-        xml.enabled false
+        xml.enabled true
         csv.enabled false
         html.enabled true
     }
@@ -104,4 +104,5 @@ clean {
     delete "log"
 }
 
+check.dependsOn javadoc
 check.dependsOn jacocoTestReport
