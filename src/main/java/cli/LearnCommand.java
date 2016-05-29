@@ -29,7 +29,7 @@ import java.util.List;
  * @author Pejman Ghorbanzade
  * @see ClassifyCommand
  */
-public final class LearnCommand extends Command {
+public final class LearnCommand implements Command {
 
   private static final Logger log = Logger.getLogger(LearnCommand.class);
 
@@ -54,11 +54,12 @@ public final class LearnCommand extends Command {
    * from serial port, constructs a posture and stores it as a learned model
    * for a given activity name.
    *
+   * @param cli the cli that is executing the given instruction
    * @param instruction the instruction as given by user
    * @throws Cli.Exception if an error occurs during learning
    */
   @Override
-  public void execute(Instruction instruction) throws Cli.Exception {
+  public void execute(Cli cli, Instruction instruction) throws Cli.Exception {
     Config cfg = ConfigManager.get("config/main.properties");
     ResourceManager rm = new ResourceManager();
     SerialQueue sq = new SerialQueue();

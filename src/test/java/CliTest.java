@@ -13,6 +13,9 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import com.ghorbanzade.sloth.Config;
+import com.ghorbanzade.sloth.ConfigManager;
+
 import com.ghorbanzade.sloth.cli.Cli;
 
 import org.junit.Test;
@@ -70,7 +73,8 @@ public class CliTest {
    */
   @Test
   public void testGetters() {
-    Cli cli = new Cli();
+    Config cfg = ConfigManager.get("config/main.properties");
+    Cli cli = new Cli(cfg);
     assertThat(cli.getPrompt(), is("$ "));
   }
 
@@ -82,7 +86,8 @@ public class CliTest {
     try {
       String userInput = "exit";
       System.setIn(new ByteArrayInputStream(userInput.getBytes("UTF-8")));
-      Cli cli = new Cli();
+      Config cfg = ConfigManager.get("config/main.properties");
+      Cli cli = new Cli(cfg);
       Instruction instr = cli.getInstruction();
       assertThat(instr, is(new Instruction(userInput)));
     } catch (UnsupportedEncodingException ex) {
@@ -101,7 +106,8 @@ public class CliTest {
     try {
       String userInput = "exit";
       System.setIn(new ByteArrayInputStream(userInput.getBytes("UTF-8")));
-      Cli cli = new Cli();
+      Config cfg = ConfigManager.get("config/main.properties");
+      Cli cli = new Cli(cfg);
       Instruction instr = cli.getInstruction();
       cli.execute(instr);
     } catch (UnsupportedEncodingException ex) {

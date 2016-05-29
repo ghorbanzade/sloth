@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author Pejman Ghorbanzade
  */
-public final class ClassifyCommand extends Command {
+public final class ClassifyCommand implements Command {
 
   private static final Logger log = Logger.getLogger(ClassifyCommand.class);
 
@@ -37,11 +37,12 @@ public final class ClassifyCommand extends Command {
    * from serial port, constructs a posture and classifies it based on
    * previously learned models.
    *
+   * @param cli the cli that is executing the given instruction
    * @param instruction the instruction as given by user
    * @throws Cli.Exception if an error occurs during classification
    */
   @Override
-  public void execute(Instruction instruction) throws Cli.Exception {
+  public void execute(Cli cli, Instruction instruction) throws Cli.Exception {
     Config cfg = ConfigManager.get("config/main.properties");
     ResourceManager rm = new ResourceManager();
     SerialQueue sq = new SerialQueue();

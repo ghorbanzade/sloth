@@ -33,7 +33,7 @@ public class SlothMain {
       Runtime.getRuntime().addShutdownHook(new Thread(()-> {
         Banner.print(cfg.getAsString("shutdown.banner"));
       }));
-      Cli cli = new Cli();
+      Cli cli = new Cli(cfg);
       while (true) {
         cli.execute(cli.getInstruction());
       }

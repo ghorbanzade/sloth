@@ -26,8 +26,8 @@ import java.util.Scanner;
  */
 public final class Cli {
 
-  private final Config cfg = ConfigManager.get("config/main.properties");
-  private final History history = new History();
+  private final Config cfg;
+  private final History history;
   private final Scanner scanner = new Scanner(System.in, "UTF-8");
   private final Map<String, Command> commands = new HashMap<String, Command>();
   private static final Logger log = Logger.getLogger(Cli.class);
@@ -35,7 +35,9 @@ public final class Cli {
   /**
    * constructs the CLI with a set of recognizable commands.
    */
-  public Cli() {
+  public Cli(Config config) {
+    this.cfg = config;
+    this.history = new History();
     this.initCommands();
   }
 
@@ -59,7 +61,7 @@ public final class Cli {
     try {
       Command command = this.parse(instruction);
       command.check(instruction);
-      command.execute(instruction);
+      command.execute(this, instruction);
     } catch (InvalidCommandException ex) {
       log.info(ex.getMessage());
     }

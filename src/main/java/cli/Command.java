@@ -13,9 +13,8 @@ package com.ghorbanzade.sloth.cli;
  *
  * @author Pejman Ghorbanzade
  * @see Cli
- * @see InvalidCommandException
  */
-public abstract class Command {
+public interface Command {
 
   /**
    * Validates whether a given user instruction has the required components
@@ -28,7 +27,7 @@ public abstract class Command {
    * @throws Cli.InvalidCommandException if instruction is missing required
    *         components to be executed.
    */
-  public void check(Instruction instruction)
+  default void check(Instruction instruction)
       throws Cli.InvalidCommandException {
     // intentionally left blank.
   }
@@ -36,11 +35,11 @@ public abstract class Command {
   /**
    * Defines the effect that a given command execution will have.
    *
+   * @param cli the cli that is executing the given instruction
    * @param instruction the instruction given by the user
    * @throws Cli.Exception case an error occurs during command execution
    *         or user requests program to be terminated.
    */
-  public abstract void execute(Instruction instruction)
-      throws Cli.Exception;
+  void execute(Cli cli, Instruction instruction) throws Cli.Exception;
 
 }

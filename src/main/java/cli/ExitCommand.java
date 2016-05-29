@@ -13,17 +13,18 @@ package com.ghorbanzade.sloth.cli;
  * @author Pejman Ghorbanzade
  * @see Command
  */
-public final class ExitCommand extends Command {
+public final class ExitCommand implements Command {
 
   /**
    * Throws exception to signal CLI should free its resources and the program
    * should terminate per user request.
    *
+   * @param cli the cli that is executing the given instruction
    * @param instruction the instruction as given by user
    * @throws Cli.Exception to signal user is gracefully terminating the program
    */
   @Override
-  public void execute(Instruction instruction) throws Cli.Exception {
+  public void execute(Cli cli, Instruction instruction) throws Cli.Exception {
     throw new Cli.GracefulExitException();
   }
 
