@@ -12,6 +12,7 @@ import com.ghorbanzade.sloth.ConfigManager;
 
 import org.apache.log4j.Logger;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,8 @@ public final class Cli {
 
   /**
    * constructs the CLI with a set of recognizable commands.
+   *
+   * @param config main configuration parameters of the program
    */
   public Cli(Config config) {
     this.cfg = config;
@@ -46,6 +49,7 @@ public final class Cli {
    */
   private void initCommands() {
     this.commands.put("classify", new ClassifyCommand());
+    this.commands.put("history", new HistoryCommand());
     this.commands.put("learn", new LearnCommand());
     this.commands.put("exit", new ExitCommand());
   }
@@ -60,6 +64,7 @@ public final class Cli {
   public void execute(Instruction instruction) throws Cli.Exception {
     try {
       Command command = this.parse(instruction);
+      this.history.add(instruction);
       command.check(instruction);
       command.execute(this, instruction);
     } catch (InvalidCommandException ex) {
@@ -93,7 +98,6 @@ public final class Cli {
       String str = scanner.nextLine();
       if (!str.isEmpty()) {
         Instruction instruction = new Instruction(str);
-        this.history.add(instruction);
         return instruction;
       }
     }
@@ -109,6 +113,15 @@ public final class Cli {
   }
 
   /**
+   * Returns a list of recent instructions passed to the CLI.
+   *
+   * @return a list of recent isntructions passed to the CLI.
+   */
+  public List<Map.Entry<Integer, Instruction>> getInstructions() {
+    return this.history.getInstructions();
+  }
+
+  /**
    * History of a CLI is simply a list of most recent instructions given
    * by the user. The size of the list can be configured by client using
    * the <pre>set cli.history.size</pre> command.
@@ -119,7 +132,8 @@ public final class Cli {
   private final class History {
 
     private int limit;
-    private final List<Instruction> list;
+    private int itemCounter = 1000;
+    private final List<Map.Entry<Integer, Instruction>> list;
 
     /**
      * A history is simply a list of most recent instructions given by the user
@@ -128,7 +142,9 @@ public final class Cli {
      */
     public History() {
       this.limit = cfg.getAsInt("cli.history.size");
-      this.list = new ArrayList<Instruction>(this.limit);
+      this.list = new ArrayList<Map.Entry<Integer, Instruction>>(
+          this.limit
+      );
     }
 
     /**
@@ -140,7 +156,11 @@ public final class Cli {
       if (this.list.size() == this.limit) {
         this.list.remove(0);
       }
-      this.list.add(instruction);
+      this.list.add(
+          new AbstractMap.SimpleImmutableEntry<Integer, Instruction>(
+              this.itemCounter++, instruction
+          )
+      );
     }
 
     /**
@@ -157,7 +177,7 @@ public final class Cli {
      *
      * @return list of instructions recorded in history
      */
-    public List<Instruction> getInstructions() {
+    public List<Map.Entry<Integer, Instruction>> getInstructions() {
       return this.list;
     }
 
@@ -171,6 +191,7 @@ public final class Cli {
    * @see GracefulExitException
    * @see InvalidCommandException
    */
+  @SuppressWarnings("serial")
   public abstract static class Exception extends RuntimeException {
 
     /**
@@ -190,6 +211,7 @@ public final class Cli {
    *
    * @author Pejman Ghorbanzade
    */
+  @SuppressWarnings("serial")
   public static final class InvalidCommandException
       extends com.ghorbanzade.sloth.cli.Cli.Exception {
 
@@ -211,6 +233,7 @@ public final class Cli {
    *
    * @author Pejman Ghorbanzade
    */
+  @SuppressWarnings("serial")
   public static final class GracefulExitException
       extends com.ghorbanzade.sloth.cli.Cli.Exception {
 
@@ -228,6 +251,7 @@ public final class Cli {
    * @author Pejman Ghorbanzade
    * @see Cli.Exception
    */
+  @SuppressWarnings("serial")
   public static final class FailedCommandException
       extends com.ghorbanzade.sloth.cli.Cli.Exception {
 
