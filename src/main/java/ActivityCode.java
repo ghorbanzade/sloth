@@ -48,6 +48,7 @@ public final class ActivityCode extends Packet {
    * constructor is used by {@link ActivityCode.Parser}.
    *
    * @param node the node for which activity code is created
+   * @param code the array of regions that is received from sensor nodes
    */
   public ActivityCode(Node node, double[] code)
       throws UnsupportedOperationException {

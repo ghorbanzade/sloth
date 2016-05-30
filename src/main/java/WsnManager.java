@@ -32,6 +32,7 @@ public final class WsnManager {
    * file that is given, in case such object is never asked for.
    *
    * @param filename the name of the file containing info about sensor network
+   * @return a wsn object configured based on the specified file
    */
   public static Wsn getWsn(String filename) {
     if (hm.containsKey(filename)) {

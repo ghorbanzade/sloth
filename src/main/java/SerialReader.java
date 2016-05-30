@@ -53,6 +53,7 @@ public final class SerialReader implements SerialPortEventListener, Closeable {
    * This method configures the serial port and opens it and starts listening
    * to it for incoming data.
    *
+   * @param portName the path to the serial port that should be opened
    * @throws FatalException if serial port cannot be configured or opened
    */
   public void open(String portName) throws FatalException {

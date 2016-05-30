@@ -28,6 +28,7 @@ public final class ModelManager {
    * been asked for.
    *
    * @param regions number of theta segments of the recognition sphere
+   * @return a model object constructed based on given number of theta segments
    */
   public static Model get(int regions) {
     if (hm.containsKey(regions)) {

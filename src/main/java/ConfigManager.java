@@ -30,6 +30,7 @@ public final class ConfigManager {
    * if the file has previously been asked for.
    *
    * @param filename the name of the file containing configuration
+   * @return a config object that holds properties according to given file
    */
   public static Config get(String filename) {
     if (hm.containsKey(filename)) {
