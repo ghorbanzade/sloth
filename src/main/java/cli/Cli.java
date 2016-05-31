@@ -10,6 +10,7 @@ package com.ghorbanzade.sloth.cli;
 import com.ghorbanzade.sloth.Config;
 import com.ghorbanzade.sloth.ConfigManager;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import java.util.AbstractMap;
@@ -68,7 +69,7 @@ public final class Cli {
       command.check(instruction);
       command.execute(this, instruction);
     } catch (InvalidCommandException ex) {
-      log.info(ex.getMessage());
+      // intentionally left blank
     }
   }
 
@@ -197,10 +198,11 @@ public final class Cli {
     /**
      * Logs a debug message for every exception that is thrown.
      *
+     * @param level the level with which the given message should be logged
      * @param message the message to be logged for a thrown exception.
      */
-    public Exception(String message) {
-      log.info(message);
+    public Exception(Level level, String message) {
+      log.log(level, message);
     }
 
   }
@@ -223,7 +225,7 @@ public final class Cli {
      *        name.
      */
     public InvalidCommandException(Instruction instruction, String message) {
-      super(String.format("%s: %s", instruction.getName(), message));
+      super(Level.INFO, String.format("%s: %s", instruction, message));
     }
 
   }
@@ -241,7 +243,7 @@ public final class Cli {
      * Prepares a debug message to be logged when this exception is thrown.
      */
     public GracefulExitException() {
-      super("exit: program terminated per user request");
+      super(Level.DEBUG, "terminating program per user request");
     }
   }
 
@@ -262,7 +264,9 @@ public final class Cli {
      * @param message the message to be logged when exception is thrown
      */
     public FailedCommandException(Instruction instruction, String message) {
-      super(String.format("%s: %s", instruction.getName(), message));
+      super(
+          Level.INFO, String.format("%s: %s", instruction.getName(), message)
+      );
     }
 
   }
