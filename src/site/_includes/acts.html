@@ -1,0 +1,39 @@
+<div data-ng-controller="acts">
+	<div class='row'>
+		<div class='col-sm-12'>
+			<h4>Activities of [[ data.user.first ]] [[ data.user.last ]]</h4>
+			<p data-ng-if="">[[ data.user.first ]]'s network is currently turned off.</p>
+			<p data-ng-if="">[[ data.user.first ]]'s network is currently operational.</p>
+			<table class="table table-hover" data-ng-if="data.activities.length > 0">
+				<thead>
+				<tr>
+					<th></th>
+					<th class="text-left">Activity</th>
+					<th class="text-center">Start Time</th>
+					<th class="text-center">End Time</th>
+					<th class="text-center">Accuracy</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="activity in data.activities">
+					<td>[[ $index + 1 ]]</td>
+					<td class="text-left capitalize">[[ activity.name ]]</td>
+					<td class="text-center" data-ng-if="isRecent(activity.end)">
+						<span am-time-ago="activity.start | amParse: 'YYYY-MM-DD HH:mm:ss'"></span>
+					</td>
+					<td class="text-center" data-ng-if="!isRecent(activity.end)">
+						[[ formatDate(activity.start) | date:'shortTime' ]]
+					</td>
+					<td class="text-center" data-ng-if="isRecent(activity.end)">
+						<span am-time-ago="activity.end | amParse: 'YYYY-MM-DD HH:mm:ss'"></span>
+					</td>
+					<td class="text-center" data-ng-if="!isRecent(activity.end)">
+						[[ formatDate(activity.end) | date:'shortTime' ]]
+					</td>
+					<td class="text-center">[[ activity.accuracy ]]%</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

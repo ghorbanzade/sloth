@@ -5,18 +5,30 @@ permalink: /
 ---
 
 <div class="row">
-	<div class="col-sm-3">
-        	<img class="img-responsive logo" src="media/img/sloth.png" alt="Sloth Logo">
-	</div>
-	<div class="col-sm-9">
+	<div class="col-sm-12">
 		<h1>Sloth</h1>
 		<h3>An Energy-Efficient Activity Recognition System</h3>
 		<hr>
-		{% capture my_include %}{% include about-me.md %}{% endcapture %}
-		{{ my_include | markdownify }}
 	</div>
-	<div class="col-sm-12">
-		<div class="about-me">
+	<div class="col-sm-8" style="text-align: justify;">
+		<div class="tab-content">
+			<div id="home" class="tab-pane fade in active">
+				{% capture my_include %}{% include about.md %}{% endcapture %}
+				{{ my_include | markdownify }}
+			</div>
+			<div id="acts" class="tab-pane fade">
+				{% include acts.html %}
+			</div>
+			<div id="health" class="tab-pane fade">
+				{% include health.html %}
+			</div>
 		</div>
+	</div>
+	<div class="col-sm-4">
+		<ul class="nav nav-pills nav-stacked">
+			<li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+			<li><a data-toggle="pill" href="#acts">Activities</a></li>
+			<li><a data-toggle="pill" href="#health">Health Metrics</a></li>
+		</ul>
 	</div>
 </div>

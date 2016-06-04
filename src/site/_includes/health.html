@@ -1,0 +1,28 @@
+<div data-ng-controller="health">
+	<div class="row">
+		<div class="col-sm-12">
+			<div data-ng-class="(countGreens(data.metrics) == data.metrics.length) ? 'panel panel-success' : ((countGreens(data.metrics) == 0) ? 'panel panel-danger' : 'panel panel-warning')">
+				<div class="panel-heading">Network Health Metrics</div>
+				<div class="panel-body">
+					<p data-ng-if="countGreens(data.metrics) == data.metrics.length">
+						All sensor platforms are operational.
+					<p>
+					<p data-ng-if="countGreens(data.metrics) < data.metrics.length && countGreens(data.metrics) != 0">
+						Some sensor platforms are inactive.
+					<p>
+					<p data-ng-if="countGreens(data.metrics) == 0">
+						Sensor network is inactive.
+					<p>
+				</div>
+				<ul class="list-group" data-ng-repeat="component in data.metrics">
+					<li class="list-group-item capitalize">
+						[[ component.name ]]
+						<span class='badge'>
+						[[ component.status ? 'ON' : 'OFF' ]]
+						</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

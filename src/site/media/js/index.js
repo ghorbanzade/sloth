@@ -15,7 +15,7 @@ app.filter("capitalize", function() {
    };
 });
 
-app.controller("demo", function($scope, $http, $location, $interval) {
+app.controller("acts", function($scope, $http, $location, $interval) {
   var remote = "http://api.ghorbanzade.com";
   $scope.loading = true;
   $scope.url = $location.absUrl();
@@ -41,6 +41,24 @@ app.controller("demo", function($scope, $http, $location, $interval) {
     thresholdTime.setTime(thresholdTime.getTime() - diff);
     return (eventTime > thresholdTime) ? true : false;
   };
+});
+
+app.controller("health", function($scope, $http, $location, $interval) {
+  var remote = "http://api.ghorbanzade.com";
+  $scope.loading = true;
+  $scope.url = $location.absUrl();
+  $scope.api = remote;
+  $scope.getData = function() {
+      $http.get($scope.api).success(function(response) {
+      $scope.data = angular.fromJson(response);
+    }).finally(function() {
+      $scope.loading = false;
+    });
+  };
+  $scope.getData();
+  $interval(function() {
+    $scope.getData();
+  }, 10000);
   $scope.countGreens = function(list) {
     var i;
     var count = 0;
@@ -50,5 +68,19 @@ app.controller("demo", function($scope, $http, $location, $interval) {
       }
     }
     return count;
+  };
+});
+
+app.controller("contact", function($scope, $http) {
+  $scope.form = {};
+  $scope.submitForm = function() {
+    $http({
+      method: "POST",
+      url   : "http://api.ghorbanzade.com/contact",
+      data  : $scope.form,
+      headers: {"Content-Type": "application/x-www-form-urlencoded"}
+    }).success(function(response) {
+      $scope.response = angular.fromJson(response);
+    });
   };
 });
