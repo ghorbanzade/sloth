@@ -1,5 +1,3 @@
-# Introduction
-
 Human activity recognition is one of the well-established applications of pervasive computing.
 Sensor-based activity recognition blends wearable computing with the internet of things (IoT) to create a wireless network of small-sized embedded sensor platforms that can detect activities of daily living (e.g. walking, eating, cooking, writing) in real-time and over a long period of time.
 Such a wearable system can be a crucial element of any mobile healthcare monitoring system.
@@ -24,5 +22,3 @@ Sloth is an end-to-end real-time activity monitoring system.
 It consists of 8 Arduino boards as wireless sensor platform, one Raspberry Pi as a sink node, a cloud-hosted API engine, and a static website that allows authorized users to monitor your activities in real-time.
 Sloth is written in C, Java, PHP and AngularJs.
 It uses a powerful multi-threaded classification algorithm, mostly written in Java, to recognize user activities and log them to a remote server where they can be queried by authorized users.
-
-Are you impressed? Learn more about how to [get started](https://github.com/ghorbanzade/sloth/wiki/Getting-Started) with Sloth!
