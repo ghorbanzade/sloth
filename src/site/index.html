@@ -13,9 +13,8 @@ permalink: /
 	<div class="col-sm-8">
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade in active">
-				<div class="about">
-					{% capture my_include %}{% include about.md %}{% endcapture %}
-					{{ my_include | markdownify }}
+				<div data-ng-controller="home">
+					<div class="about" data-ng-bind-html="data"></div>
 				</div>
 			</div>
 			<div id="acts" class="tab-pane fade">

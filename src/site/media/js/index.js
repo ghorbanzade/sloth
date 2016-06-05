@@ -15,6 +15,17 @@ app.filter("capitalize", function() {
    };
 });
 
+app.controller("home", function($scope, $http, $location, $sce) {
+  var remote = "https://raw.githubusercontent.com/ghorbanzade/sloth/master/About.md";
+  var converter = new showdown.Converter();
+  $scope.loading = true;
+  $http.get(remote).success(function(response) {
+    $scope.data = $sce.trustAsHtml(converter.makeHtml(response));
+  }).finally(function() {
+    $scope.loading = false;
+  });
+});
+
 app.controller("acts", function($scope, $http, $location, $interval) {
   var remote = "http://api.ghorbanzade.com";
   $scope.loading = true;

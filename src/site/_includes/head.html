@@ -3,14 +3,16 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="/favicon.ico?v=3">
+	<link rel="icon" href="/favicon.ico?v=2">
 
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-sanitize.min.js"></script>
 	<script type="text/javascript" src="http://rawgit.com/moment/moment/2.13.0/min/moment.min.js"></script>
 	<script type="text/javascript" src="http://rawgit.com/urish/angular-moment/1.0.0-beta.5/angular-moment.min.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.4.1/dist/showdown.min.js"></script>
 
 	<title>{{ site.title | escape }}{% if page.title %} | {{ page.title | escape }}{% endif %}</title>
 	<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
