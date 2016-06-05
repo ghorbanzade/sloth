@@ -10,11 +10,13 @@ permalink: /
 		<h3>An Energy-Efficient Activity Recognition System</h3>
 		<hr>
 	</div>
-	<div class="col-sm-8" style="text-align: justify;">
+	<div class="col-sm-8">
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade in active">
-				{% capture my_include %}{% include about.md %}{% endcapture %}
-				{{ my_include | markdownify }}
+				<div class="about">
+					{% capture my_include %}{% include about.md %}{% endcapture %}
+					{{ my_include | markdownify }}
+				</div>
 			</div>
 			<div id="acts" class="tab-pane fade">
 				{% include acts.html %}
