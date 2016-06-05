@@ -7,15 +7,9 @@
 package com.ghorbanzade.sloth;
 
 import static org.hamcrest.CoreMatchers.is;
-//import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-
-//import java.util.Arrays;
-//import java.util.Date;
-//import java.util.HashMap;
-//import java.util.Map;
 
 /**
 * Unit test suit for packet class and its subclasses.
