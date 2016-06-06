@@ -245,6 +245,7 @@ public final class Cli {
     public GracefulExitException() {
       super(Level.DEBUG, "terminating program per user request");
     }
+
   }
 
   /**

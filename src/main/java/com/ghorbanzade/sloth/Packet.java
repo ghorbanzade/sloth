@@ -44,9 +44,9 @@ public abstract class Packet {
   }
 
   /**
-   * Custom exception that thrown when ${@link Parser} failes to create
-   * a packet object using the given string tokenizer. This exception is
-   * not fatal and must be caught by packet reader.
+   * Custom exception thrown when {@link Parser} failes to create a packet
+   * object using the given string tokenizer. This exception is not fatal
+   * and must be caught by packet reader.
    *
    * @author Pejman Ghorbanzade
    * @see Packet

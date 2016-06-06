@@ -10,8 +10,8 @@ package com.ghorbanzade.sloth;
 import org.apache.log4j.Logger;
 
 /**
- * This class defines a custom exception that is thrown to hint the packet
- * processor that the packet must be discarded.
+ * Custom exception thrown to hint that packet processor should discard
+ * the packet.
  *
  * @author Pejman Ghorbanzade
  * @see Packet
@@ -23,9 +23,9 @@ public final class CurruptPacketException extends RuntimeException {
       Logger.getLogger(CurruptPacketException.class);
 
   /**
-   * A currupt packet exception is thrown if a packet is found severely
-   * affected by dynamic accelaration. This exception is not fatal and
-   * must be caught by packet processor.
+   * Exception is thrown if a packet is found severely affected by dynamic
+   * accelaration. This exception is not fatal and must be caught by packet
+   * processor.
    */
   public CurruptPacketException() {
     log.info("currupt packet detected");
