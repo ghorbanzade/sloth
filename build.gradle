@@ -12,7 +12,7 @@ apply plugin: 'java'
 apply plugin: 'jdepend'
 apply plugin: 'pmd'
 
-version = '0.2'
+version = '0.3'
 
 repositories {
     mavenCentral()

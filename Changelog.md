@@ -2,7 +2,7 @@
 
 ### Version 0.3
 
-Release Date: September 30, 2016 (Expected)
+Release Date: December 31, 2016 (Expected)
 
 [GitHub Diff](https://github.com/ghorbanzade/sloth/compare/sloth-0.3...sloth-0.2)
 
