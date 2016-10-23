@@ -1,38 +1,38 @@
 [
   {
     "id": 2,
-    "name": "la",
-    "description": "left arm"
-  },
-  {
-    "id": 3,
     "name": "lw",
     "description": "left wrist"
   },
   {
+    "id": 3,
+    "name": "rw",
+    "description": "right wrist"
+  },
+  {
     "id": 4,
-    "name": "lt",
-    "description": "left thigh"
+    "name": "la",
+    "description": "left arm"
   },
   {
     "id": 5,
-    "name": "la",
-    "description": "left foot"
-  },
-  {
-    "id": 6,
     "name": "ra",
     "description": "right arm"
   },
   {
+    "id": 6,
+    "name": "lt",
+    "description": "left thigh"
+  },
+  {
     "id": 7,
-    "name": "lf",
-    "description": "right wrist"
+    "name": "rt",
+    "description": "right thigh"
   },
   {
     "id": 8,
-    "name": "rt",
-    "description": "right thigh"
+    "name": "lf",
+    "description": "left foot"
   },
   {
     "id": 9,
