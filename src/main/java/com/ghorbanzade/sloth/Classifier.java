@@ -88,7 +88,7 @@ public final class Classifier implements Runnable {
         similarity += this.posture.get(node).findSimilarity(code);
       }
       similarity /= this.posture.getNodes().size();
-      log.trace("similarity: " + similarity);
+      log.trace("similarity with " + act.getName() + ": " + similarity);
       if (similarity > accuracy) {
         name = act.getName();
         accuracy = similarity;

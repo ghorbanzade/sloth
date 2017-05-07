@@ -27,7 +27,7 @@ app.controller("home", function($scope, $http, $location, $sce) {
 });
 
 app.controller("acts", function($scope, $http, $location, $interval) {
-  var remote = "http://api.ghorbanzade.com";
+  var remote = "https://api.ghorbanzade.com";
   $scope.loading = true;
   $scope.url = $location.absUrl();
   $scope.api = remote;
@@ -55,7 +55,7 @@ app.controller("acts", function($scope, $http, $location, $interval) {
 });
 
 app.controller("health", function($scope, $http, $location, $interval) {
-  var remote = "http://api.ghorbanzade.com";
+  var remote = "https://api.ghorbanzade.com";
   $scope.loading = true;
   $scope.url = $location.absUrl();
   $scope.api = remote;
@@ -87,7 +87,7 @@ app.controller("contact", function($scope, $http) {
   $scope.submitForm = function() {
     $http({
       method: "POST",
-      url   : "http://api.ghorbanzade.com/contact",
+      url   : "https://api.ghorbanzade.com/contact",
       data  : $scope.form,
       headers: {"Content-Type": "application/x-www-form-urlencoded"}
     }).success(function(response) {

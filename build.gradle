@@ -5,6 +5,7 @@
 // https://github.com/ghorbanzade/sloth/blob/master/LICENSE
 //
 
+apply plugin: 'application'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
@@ -13,6 +14,7 @@ apply plugin: 'jdepend'
 apply plugin: 'pmd'
 
 version = '0.3'
+mainClassName = 'com.ghorbanzade.sloth.SlothMain'
 
 repositories {
     mavenCentral()
@@ -37,9 +39,15 @@ jar {
     manifest {
         attributes('Implementation-Title': 'Sloth',
                    'Implementation-Version': version,
-                   'Main-Class': 'com.ghorbanzade.sloth.SlothMain'
+                   'Main-Class': mainClassName
                    //'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
         )
+    }
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
     }
 }
 
@@ -111,6 +119,10 @@ jdependMain {
         xml.enabled false
         text.enabled true
     }
+}
+
+run {
+  standardInput = System.in
 }
 
 clean {

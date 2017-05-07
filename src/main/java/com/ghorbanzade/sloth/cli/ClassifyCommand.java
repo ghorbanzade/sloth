@@ -8,6 +8,7 @@
 package com.ghorbanzade.sloth.cli;
 
 import com.ghorbanzade.sloth.Classifier;
+import com.ghorbanzade.sloth.CloudConnector;
 import com.ghorbanzade.sloth.Config;
 import com.ghorbanzade.sloth.ConfigManager;
 import com.ghorbanzade.sloth.PacketProcessor;
@@ -54,6 +55,7 @@ public final class ClassifyCommand implements Command {
     threads.add(new Thread(new PacketReader(sq, pq)));
     threads.add(new Thread(new PacketProcessor(pq, posture)));
     threads.add(new Thread(new Classifier(posture)));
+    threads.add(new Thread(new CloudConnector()));
     try {
       Runtime.getRuntime().addShutdownHook(new Thread(rm));
       for (Thread thread: threads) {
