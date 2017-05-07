@@ -9,6 +9,7 @@ package com.ghorbanzade.sloth.cli;
 
 import com.ghorbanzade.sloth.Config;
 import com.ghorbanzade.sloth.ConfigManager;
+import com.ghorbanzade.sloth.parser.CommandFileParser;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -49,6 +50,10 @@ public final class Cli {
    * Initializes a list of commands recognized by the CLI.
    */
   private void initCommands() {
+    CommandFileParser cfp = new CommandFileParser(
+      cfg.getAsString("file.commands.conf")
+    );
+    cfp.parse();
     this.commands.put("classify", new ClassifyCommand());
     this.commands.put("history", new HistoryCommand());
     this.commands.put("learn", new LearnCommand());
