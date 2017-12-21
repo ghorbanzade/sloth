@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 after_success:
-  - ./dev/coverage.sh codacy codecov
+  - ./tools/coverage.sh codacy codecov
 notifications:
   email:
     recipients:
