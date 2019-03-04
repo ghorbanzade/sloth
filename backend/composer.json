@@ -1,0 +1,21 @@
+{
+  "name": "ghorbanzade/sloth-backend",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pejman Ghorbanzade",
+      "email": "pejman@ghorbanzade.com"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "cls/"
+    ]
+  },
+  "require": {
+  },
+  "require-dev": {
+    "phpmd/phpmd": "^2.6",
+    "phpunit/phpunit": ">=4.8"
+  }
+}

@@ -1,0 +1,6 @@
+title: Sloth
+email: pejman@ghorbanzade.com
+baseurl: "/sloth"
+
+# Build settings
+markdown: kramdown
