@@ -48,7 +48,7 @@ services:
       - 8082:80
     environment:
       - PMA_USER=slothuser
-      - PMA_HOST=db
+      - PMA_HOST=sloth_mysql
       - PMA_PORT=3306
       - PMA_PASSWORD=slothpass
       - PHP_UPLOAD_MAX_FILESIZE=100MB

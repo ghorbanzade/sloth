@@ -2,3 +2,4 @@ aggregator/build
 aggregator/.gradle
 aggregator/log
 backend/vendor
+data

@@ -1,7 +1,7 @@
 <?php
 spl_autoload_register('myAutoloader');
 function myAutoloader($class_name) {
-        include("cls/$class_name.php");
+	include("cls/$class_name.php");
 }
 require 'vendor/autoload.php';
 
