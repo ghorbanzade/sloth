@@ -12,10 +12,6 @@ services:
       context: .
       dockerfile: config/docker/backend.Dockerfile
     image: ghorbanzade/sloth:backend
-    volumes:
-      - ./local/logs/backend:/opt/local/logs/backend
-    environment:
-      - ENV_FILE=prod
     depends_on:
       - sloth_mysql
     restart: always
@@ -31,7 +27,7 @@ services:
       - sloth_backend
     restart: always
 
-  mysql:
+  sloth_mysql:
     image: mysql:5.7
     ports:
       - 3306:3306
@@ -44,10 +40,10 @@ services:
       - ./data/mysql:/var/lib/mysql
     restart: always
 
-  phpmyadmin:
+  sloth_phpmyadmin:
     image: phpmyadmin/phpmyadmin:4.8
     links:
-      - mysql
+      - sloth_mysql
     ports:
       - 8082:80
     environment:
