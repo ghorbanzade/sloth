@@ -16,7 +16,7 @@ app.filter("capitalize", function() {
 });
 
 app.controller("home", function($scope, $http, $location, $sce) {
-  var remote = "https://raw.githubusercontent.com/ghorbanzade/sloth/master/About.md";
+  var remote = "https://raw.githubusercontent.com/ghorbanzade/sloth/master/docs/About.md";
   var converter = new showdown.Converter();
   $scope.loading = true;
   $http.get(remote).success(function(response) {
@@ -27,7 +27,7 @@ app.controller("home", function($scope, $http, $location, $sce) {
 });
 
 app.controller("acts", function($scope, $http, $location, $interval) {
-  var remote = "https://api.ghorbanzade.com";
+  var remote = "http://localhost/api";
   $scope.loading = true;
   $scope.url = $location.absUrl();
   $scope.api = remote;
@@ -55,7 +55,7 @@ app.controller("acts", function($scope, $http, $location, $interval) {
 });
 
 app.controller("health", function($scope, $http, $location, $interval) {
-  var remote = "https://api.ghorbanzade.com";
+  var remote = "http://localhost/api";
   $scope.loading = true;
   $scope.url = $location.absUrl();
   $scope.api = remote;
@@ -73,9 +73,11 @@ app.controller("health", function($scope, $http, $location, $interval) {
   $scope.countGreens = function(list) {
     var i;
     var count = 0;
-    for (i = 0; i < list.length; i++) {
-      if (list[i].status) {
-        count++;
+    if (list && list.length) {
+      for (i = 0; i < list.length; i++) {
+        if (list[i].status) {
+          count++;
+        }
       }
     }
     return count;
@@ -87,7 +89,7 @@ app.controller("contact", function($scope, $http) {
   $scope.submitForm = function() {
     $http({
       method: "POST",
-      url   : "https://api.ghorbanzade.com/contact",
+      url   : "http://localhost/api/contact",
       data  : $scope.form,
       headers: {"Content-Type": "application/x-www-form-urlencoded"}
     }).success(function(response) {

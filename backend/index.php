@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$activity->log();
 	}
 } else {
-	$token = 'your-token';
+	$token = 'NT20p6xPrdDLeBYs';
 	$user = get_user_by_token($token);
 	$response = array(
 		'user' => $user,
