@@ -1,0 +1,4 @@
+aggregator/.gradle
+aggregator/build
+aggregator/logs
+backend/vendor

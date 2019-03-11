@@ -1,6 +1,7 @@
-## Sloth: An Energy-Efficient Activity Recognition System
+# A Distributed Activity Recognition System
 
-[![Build Status](https://travis-ci.org/ghorbanzade/sloth.svg?branch=master)](https://travis-ci.org/ghorbanzade/sloth)
+[![Build Status](https://travis-ci.com/ghorbanzade/sloth.svg?branch=master)](https://travis-ci.com/ghorbanzade/sloth)
+[![codecov](https://codecov.io/gh/ghorbanzade/sloth/branch/master/graph/badge.svg)](https://codecov.io/gh/ghorbanzade/sloth)
 
 Human activity recognition is one of the well-established applications of pervasive computing.
 Sensor-based activity recognition blends wearable computing with internet of things to create a wireless network of small-sized embedded sensor platforms that can detect activities of daily living (e.g. walking, eating, cooking, writing) in real-time and over a long period of time.
@@ -15,19 +16,7 @@ Using this algorithm, wearable sensor platforms read triaxial accelerations with
 Sloth is an end-to-end real-time activity monitoring system.
 It has been tested on a network with 8 Arduino boards as sensor platforms, one raspberry PI as the sink node, a cloud server API and a static website that allows authorized users to monitor user's activities as they are being performed.
 
-Are you impressed? Read [here](https://github.com/ghorbanzade/sloth/blob/master/About.md) to learn more about Sloth and what it takes to build your own activity recognition system that can last for days without charging!
-
-### Contribution
-
-Bug reports and pull requests are immensely appreciated.
-
-### License
-
-Source code is released under the [MIT License].
-
-### Contact
-
-For questions or further information please contact [Pejman Ghorbanzade].
+Are you impressed? Read [here](https://github.com/ghorbanzade/sloth/blob/master/docs/About.md) to learn more about Sloth and what it takes to build your own activity recognition system that can last for days without charging!
 
 [MIT License]: https://github.com/ghorbanzade/sloth/blob/master/LICENSE
-[Pejman Ghorbanzade]: http://www.ghorbanzade.com
+[Pejman Ghorbanzade]: https://pejman.ghorbanzade.com

@@ -1,8 +1,0 @@
-{
-	"database": {
-		"host": "database-host",
-		"name": "database-name",
-		"user": "database-user",
-		"pass": "database-pass"
-	}
-}

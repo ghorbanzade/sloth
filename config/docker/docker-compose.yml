@@ -1,0 +1,55 @@
+version: '3'
+services:
+
+  sloth_aggregator:
+    build:
+      context: .
+      dockerfile: config/docker/aggregator.Dockerfile
+    image: ghorbanzade/sloth:aggregator
+
+  sloth_backend:
+    build:
+      context: .
+      dockerfile: config/docker/backend.Dockerfile
+    image: ghorbanzade/sloth:backend
+    depends_on:
+      - sloth_mysql
+    restart: always
+
+  sloth_frontend:
+    build:
+      context: .
+      dockerfile: config/docker/frontend.Dockerfile
+    image: ghorbanzade/sloth:frontend
+    ports:
+      - 80:80
+    depends_on:
+      - sloth_backend
+    restart: always
+
+  sloth_mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=slothrootpass
+      - MYSQL_DATABASE=sloth_main
+      - MYSQL_USER=slothuser
+      - MYSQL_PASSWORD=slothpass
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: always
+
+  sloth_phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.8
+    links:
+      - sloth_mysql
+    ports:
+      - 8082:80
+    environment:
+      - PMA_USER=slothuser
+      - PMA_HOST=sloth_mysql
+      - PMA_PORT=3306
+      - PMA_PASSWORD=slothpass
+      - PHP_UPLOAD_MAX_FILESIZE=100MB
+    restart: always

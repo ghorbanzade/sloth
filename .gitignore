@@ -1,4 +1,5 @@
-.gradle
-build
+aggregator/build
+aggregator/.gradle
+aggregator/log
+backend/vendor
 data
-log

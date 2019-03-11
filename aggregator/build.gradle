@@ -1,0 +1,122 @@
+//
+// Sloth: An Energy-Efficient Activity Recognition System
+// Copyright 2016 Pejman Ghorbanzade <pejman@ghorbanzade.com>
+// Released under the terms of MIT License
+// https://github.com/ghorbanzade/sloth/blob/master/LICENSE
+//
+
+plugins {
+    id 'application'
+    id 'checkstyle'
+    id 'java'
+    id 'jacoco'
+    id 'pmd'
+    id 'com.github.spotbugs' version "1.6.9"
+}
+
+version = '0.3'
+mainClassName = 'com.ghorbanzade.sloth.SlothMain'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.apache.httpcomponents:httpclient:4.5.2'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'commons-io:commons-io:2.5'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.rxtx:rxtx:2.1.7'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+}
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes('Implementation-Title': 'Sloth',
+                   'Implementation-Version': version,
+                   'Main-Class': mainClassName
+                   //'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+task myJavadocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    destinationDir = file("./doc/")
+}
+
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+checkstyle {
+    toolVersion = '8.18'
+    ignoreFailures = false
+}
+
+pmd {
+    toolVersion = '6.12.0'
+    ignoreFailures = true
+}
+
+spotbugs {
+    toolVersion = '3.1.12'
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+tasks.withType(Pmd) {
+    ruleSets = [
+        "category/java/design.xml",
+        "category/java/codestyle.xml",
+        "category/java/bestpractices.xml"
+    ]
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+run {
+  standardInput = System.in
+}
+
+clean {
+    delete "log"
+}
+
+check.dependsOn javadoc
+check.dependsOn jacocoTestReport
