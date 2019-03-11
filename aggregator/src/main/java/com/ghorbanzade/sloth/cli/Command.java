@@ -8,38 +8,47 @@
 package com.ghorbanzade.sloth.cli;
 
 /**
- * Defines a process to be initiated when user enters a corresponding
+ * Defines the process to be initiated when user enters a corresponding
  * instruction.
  *
  * @author Pejman Ghorbanzade
  * @see Cli
  */
-public interface Command {
+public abstract class Command {
+
+  private ArrayList<CommandSyntax> syntaxes;
 
   /**
-   * Validates whether a given user instruction has the required components
-   * to be converted into a specific command. By default, there is no
-   * constraint for an instruction to be converted to a command. If a
-   * command requires additional limitations e.g. number of arguments,
-   * specific options, etc. it should override this method.
+   * Creates a command with the syntax used by the client,
+   * Creates a command with a list of arguments and the syntax from which
+   * they were passed, whose validity and format has already been verified by CLI.
    *
-   * @param instruction the instruction given by the user
-   * @throws Cli.InvalidCommandException if instruction is missing required
-   *         components to be executed.
+   * @param args arguments given to this command
    */
-  default void check(Instruction instruction)
-      throws Cli.InvalidCommandException {
-    // intentionally left blank.
+  public Command(ArrayList<CommandSyntax> syntaxes) {
+    this.args = args;
+  }
+
+  /**
+   * Returns a help string that contains general description, list of
+   * possible syntaxes, format and range of arguments etc for this command.
+   *
+   * @return a help string for this command ready to be printed on screen
+   */
+  public StringBuilder help() {
+    StringBuilder sb = new StringBuilder();
+    sb.add("help");
+    return sb.toString();
   }
 
   /**
    * Defines the effect that a given command execution will have.
    *
-   * @param cli the cli that is executing the given instruction
-   * @param instruction the instruction given by the user
+   * @param cli the cli that is executing the given command
+   * @param syntax the instruction given by the user
    * @throws Cli.Exception case an error occurs during command execution
    *         or user requests program to be terminated.
    */
-  void execute(Cli cli, Instruction instruction) throws Cli.Exception;
+  public abstract void execute(Cli cli, Syntax syntax) throws Cli.Exception;
 
 }
