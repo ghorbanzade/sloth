@@ -27,7 +27,7 @@ dependencies {
     compile 'commons-io:commons-io:2.6'
     compile 'log4j:log4j:1.2.17'
     compile 'org.rxtx:rxtx:2.1.7'
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
 
